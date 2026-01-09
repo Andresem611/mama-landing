@@ -1,0 +1,97 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { cn } from "@/lib/utils"
+
+interface HeaderProps {
+  className?: string
+}
+
+export function Header({ className }: HeaderProps) {
+  const scrollToWaitlist = () => {
+    // Scroll to the Hero section's waitlist form
+    const heroSection = document.querySelector('section')
+    const emailInput = heroSection?.querySelector('input[type="email"]')
+    if (emailInput) {
+      emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      // Focus the input after scrolling
+      setTimeout(() => {
+        (emailInput as HTMLInputElement).focus()
+      }, 500)
+    }
+  }
+
+  return (
+    <header
+      className={cn(
+        "fixed top-0 left-0 right-0 z-50",
+        "backdrop-blur-md bg-white/70",
+        "border-b border-rose-100/50",
+        className
+      )}
+    >
+      <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <motion.a
+          href="/"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-2xl md:text-3xl text-rose-400 tracking-wide"
+          style={{ fontFamily: "'Titan One', cursive" }}
+        >
+          MAMA
+        </motion.a>
+
+        {/* Retro "Join Waitlist" Button */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <motion.button
+            onClick={scrollToWaitlist}
+            className={cn(
+              // Base retro pill shape
+              "relative px-6 py-2.5 rounded-full",
+              "font-semibold text-sm md:text-base",
+              // Retro thick border
+              "border-[3px] border-rose-400",
+              // Background and text
+              "bg-gradient-to-b from-rose-50 to-rose-100 text-rose-500",
+              // 3D shadow effect (arcade button style)
+              "shadow-[0_4px_0_0_#e11d48,0_6px_12px_rgba(225,29,72,0.3)]",
+              // Smooth transitions
+              "transition-all duration-150 ease-out",
+              // Focus styles
+              "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2"
+            )}
+            whileHover={{
+              scale: 1.05,
+              y: -2,
+              boxShadow: "0 6px 0 0 #e11d48, 0 8px 20px rgba(225,29,72,0.4)",
+            }}
+            whileTap={{
+              scale: 0.98,
+              y: 2,
+              boxShadow: "0 1px 0 0 #e11d48, 0 2px 4px rgba(225,29,72,0.2)",
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 500,
+              damping: 20,
+            }}
+          >
+            {/* Subtle inner glow/highlight for retro effect */}
+            <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/40 pointer-events-none" />
+
+            {/* Button text */}
+            <span className="relative z-10">Join Waitlist</span>
+          </motion.button>
+        </motion.div>
+      </nav>
+    </header>
+  )
+}
+
+export default Header
