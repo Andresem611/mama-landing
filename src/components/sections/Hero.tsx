@@ -67,11 +67,11 @@ export function Hero({ className }: HeroProps) {
         className
       )}
     >
-      {/* Full-viewport rose gradient background */}
+      {/* Full-viewport solid rose background */}
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(160deg, #FDA4AF 0%, #FB7185 40%, #F472B6 100%)",
+          background: "#FB7185",
         }}
       />
 
