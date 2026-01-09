@@ -1,0 +1,5 @@
+export { Hero } from "./Hero"
+export { UseCases } from "./UseCases"
+export { HowItWorks } from "./HowItWorks"
+export { FinalCTA } from "./FinalCTA"
+export { Footer } from "./Footer"
