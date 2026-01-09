@@ -96,8 +96,6 @@ export function Hero({ className }: HeroProps) {
         <MamaMascot
           width={320}
           height={448}
-          animate={true}
-          intensity={0.6}
           className="drop-shadow-2xl sm:scale-100 md:scale-110 lg:scale-125 xl:scale-150"
         />
       </motion.div>
