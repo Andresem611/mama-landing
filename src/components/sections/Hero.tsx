@@ -67,11 +67,11 @@ export function Hero({ className }: HeroProps) {
         className
       )}
     >
-      {/* Full-viewport solid rose background */}
+      {/* Full-viewport warm cream background */}
       <div
         className="absolute inset-0"
         style={{
-          background: "#FB7185",
+          background: "#FEFAF6",
         }}
       />
 
@@ -111,7 +111,7 @@ export function Hero({ className }: HeroProps) {
           {/* Left side - Headline */}
           <div className="flex-shrink-0">
             <h1
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-white leading-[0.95] tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl text-zinc-900 leading-[0.95] tracking-tight"
               style={{ fontFamily: "'Righteous', cursive" }}
             >
               <WordPullUp
@@ -130,11 +130,20 @@ export function Hero({ className }: HeroProps) {
                 {showUnderline && (
                   <UnderlineDraw
                     delay={0}
-                    color="white"
+                    color="#FB7185"
                     strokeWidth={5}
                     className="absolute bottom-0 left-0 w-full"
                   />
                 )}
+              </span>
+              {/* Second line - Call to action */}
+              <span className="block mt-2 sm:mt-3 text-rose-400">
+                <WordPullUp
+                  words="Start calling MAMA."
+                  className="justify-start"
+                  delayMultiple={0.15}
+                  startDelay={secondLineStartDelay + 0.6}
+                />
               </span>
             </h1>
           </div>
@@ -146,7 +155,7 @@ export function Hero({ className }: HeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.4 }}
-              className="text-lg sm:text-xl text-white/90 mb-6 leading-relaxed"
+              className="text-lg sm:text-xl text-zinc-600 mb-6 leading-relaxed"
               style={{ fontFamily: "'Nunito', sans-serif" }}
             >
               AI that makes the phone calls you hate. Dentist appointments, restaurant reservations, customer service.
@@ -162,7 +171,7 @@ export function Hero({ className }: HeroProps) {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-white/20 backdrop-blur-sm text-white px-6 py-4 rounded-2xl font-medium border border-white/30"
+                  className="bg-rose-100 text-rose-700 px-6 py-4 rounded-2xl font-medium border border-rose-200"
                   style={{ fontFamily: "'Nunito', sans-serif" }}
                 >
                   You are on the list! We will be in touch soon.
@@ -178,7 +187,7 @@ export function Hero({ className }: HeroProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    className="flex-1 h-12 sm:h-14 px-5 rounded-full bg-white/95 border-0 text-zinc-900 placeholder:text-zinc-400 focus:ring-2 focus:ring-white/50 focus:bg-white shadow-lg"
+                    className="flex-1 h-12 sm:h-14 px-5 rounded-full bg-white border-2 border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:ring-2 focus:ring-rose-200 focus:border-rose-300 shadow-md"
                     style={{ fontFamily: "'Nunito', sans-serif" }}
                   />
                   <motion.button
@@ -189,15 +198,15 @@ export function Hero({ className }: HeroProps) {
                       "relative h-12 sm:h-14 px-8 rounded-full",
                       "font-bold text-base",
                       // Retro thick border
-                      "border-[3px] border-zinc-900",
+                      "border-[3px] border-rose-500",
                       // Background and text
-                      "bg-gradient-to-b from-zinc-800 to-zinc-900 text-white",
+                      "bg-gradient-to-b from-rose-400 to-rose-500 text-white",
                       // 3D shadow effect (arcade button style)
-                      "shadow-[0_4px_0_0_#18181b,0_6px_12px_rgba(24,24,27,0.4)]",
+                      "shadow-[0_4px_0_0_#be123c,0_6px_12px_rgba(225,29,72,0.4)]",
                       // Smooth transitions
                       "transition-all duration-150 ease-out",
                       // Focus styles
-                      "outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2",
+                      "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2",
                       // Disabled state
                       "disabled:opacity-70"
                     )}
@@ -205,12 +214,12 @@ export function Hero({ className }: HeroProps) {
                     whileHover={{
                       scale: 1.05,
                       y: -2,
-                      boxShadow: "0 6px 0 0 #18181b, 0 8px 20px rgba(24,24,27,0.5)",
+                      boxShadow: "0 6px 0 0 #be123c, 0 8px 20px rgba(225,29,72,0.5)",
                     }}
                     whileTap={{
                       scale: 0.98,
                       y: 2,
-                      boxShadow: "0 1px 0 0 #18181b, 0 2px 4px rgba(24,24,27,0.2)",
+                      boxShadow: "0 1px 0 0 #be123c, 0 2px 4px rgba(225,29,72,0.2)",
                     }}
                     transition={{
                       type: "spring",
@@ -221,7 +230,7 @@ export function Hero({ className }: HeroProps) {
                     {/* Subtle inner glow/highlight for retro effect */}
                     <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
                     <span className="relative z-10">
-                      {isSubmitting ? "Joining..." : "Join MAMA"}
+                      {isSubmitting ? "Joining..." : <>Join <span style={{ fontFamily: "'Righteous', cursive" }}>MAMA</span></>}
                     </span>
                   </motion.button>
                 </form>
@@ -232,7 +241,7 @@ export function Hero({ className }: HeroProps) {
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-white/80 text-sm mt-3"
+                  className="text-rose-600 text-sm mt-3"
                   style={{ fontFamily: "'Nunito', sans-serif" }}
                 >
                   {error}
@@ -245,7 +254,7 @@ export function Hero({ className }: HeroProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.8 }}
-              className="text-sm text-white/70 mt-4"
+              className="text-sm text-zinc-500 mt-4"
               style={{ fontFamily: "'Nunito', sans-serif" }}
             >
               No spam. Just less phone anxiety.
@@ -264,10 +273,10 @@ export function Hero({ className }: HeroProps) {
         <motion.div
           animate={{ y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full border-2 border-white/40 flex items-start justify-center p-2"
+          className="w-6 h-10 rounded-full border-2 border-zinc-300 flex items-start justify-center p-2"
         >
           <motion.div
-            className="w-1.5 h-1.5 rounded-full bg-white/60"
+            className="w-1.5 h-1.5 rounded-full bg-rose-400"
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           />

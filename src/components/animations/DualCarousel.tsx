@@ -34,20 +34,12 @@ function UseCaseCard({ useCase }: { useCase: UseCase }) {
     <div
       className={cn(
         "relative flex items-center gap-4 px-6 py-4",
-        "bg-gradient-to-br from-rose-50 via-rose-50 to-rose-100/80",
-        "rounded-2xl border border-rose-200/60",
+        "bg-white/95",
+        "rounded-2xl border-2 border-white/60",
         "whitespace-nowrap shrink-0",
-        "shadow-sm hover:shadow-md transition-shadow duration-300"
+        "shadow-lg shadow-rose-900/10 hover:shadow-xl transition-shadow duration-300"
       )}
     >
-      {/* Subtle grain texture overlay */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-[0.03] pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-        }}
-      />
-
       {/* OpenMoji Icon */}
       <div className="relative w-8 h-8 flex-shrink-0">
         <Image

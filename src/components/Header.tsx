@@ -25,11 +25,10 @@ export function Header({ className }: HeaderProps) {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50",
-        "bg-white",
-        "border-b border-rose-100",
-        "shadow-sm",
+        "border-b border-rose-200/30",
         className
       )}
+      style={{ backgroundColor: "#FEFAF6" }}
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
@@ -86,7 +85,7 @@ export function Header({ className }: HeaderProps) {
 {/* Clean button - no inner gradient overlay */}
 
             {/* Button text */}
-            <span className="relative z-10">Join Waitlist</span>
+            <span className="relative z-10" style={{ fontFamily: "'Righteous', cursive" }}>Join Waitlist</span>
           </motion.button>
         </motion.div>
       </nav>

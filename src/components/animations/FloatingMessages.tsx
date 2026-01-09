@@ -12,73 +12,57 @@ interface FloatingMessagesProps {
 
 const defaultMessages = [
   "You're 25, call the dentist yourself",
-  "Who's calling the restaurant?",
-  "Can you schedule my appointment?",
-  "I get shy on the phone...",
-  "Mom, can you do it for me?",
-  "I hate being on hold",
-  "Can someone else call?",
-  "Phone calls give me anxiety",
+  "Mom can you call for me pleaseee",
+  "I'm literally an adult why is this hard",
+  "Not me rehearsing what to say...",
+  "Can you pretend to be me?",
+  "I'll do the dishes for a month",
 ]
 
-// Positions adjusted to be BELOW header (header ~64px = ~10% on most screens)
-// Each position includes parallax speed multiplier for depth effect
+// Positions closer to center, staggered around mascot
+// Avoiding header (top 8%), headline area (bottom-left), and keeping away from edges
 const positions = [
-  // Top-left - below header
+  // Left side - upper (below header, staggered)
   {
-    top: "14%",
-    left: "6%",
+    top: "12%",
+    left: "8%",
     parallaxSpeed: 0.15,
-    rotation: -4,
-  },
-  // Top-right - below header
-  {
-    top: "11%",
-    right: "18%",
-    parallaxSpeed: 0.25,
-    rotation: 3,
-  },
-  // Right side - upper middle
-  {
-    top: "30%",
-    right: "4%",
-    parallaxSpeed: 0.2,
-    rotation: 4,
-  },
-  // Left side - mid-upper
-  {
-    top: "26%",
-    left: "2%",
-    parallaxSpeed: 0.1,
     rotation: -3,
   },
-  // Bottom-right area
+  // Right side - upper (below header, staggered)
   {
-    top: "48%",
-    right: "6%",
-    parallaxSpeed: 0.18,
+    top: "10%",
+    right: "10%",
+    parallaxSpeed: 0.2,
     rotation: 2,
   },
-  // Bottom-left area
+  // Left side - middle
   {
-    top: "52%",
+    top: "28%",
     left: "5%",
     parallaxSpeed: 0.12,
     rotation: -2,
   },
-  // Mid-right, lower
+  // Right side - middle
+  {
+    top: "24%",
+    right: "6%",
+    parallaxSpeed: 0.18,
+    rotation: 3,
+  },
+  // Left side - lower-middle (above headline zone)
   {
     top: "42%",
-    right: "15%",
-    parallaxSpeed: 0.22,
-    rotation: 1,
-  },
-  // Top center-left
-  {
-    top: "18%",
-    left: "25%",
-    parallaxSpeed: 0.16,
+    left: "10%",
+    parallaxSpeed: 0.1,
     rotation: -1,
+  },
+  // Right side - lower-middle
+  {
+    top: "38%",
+    right: "8%",
+    parallaxSpeed: 0.22,
+    rotation: 2,
   },
 ]
 
@@ -95,7 +79,7 @@ export function FloatingMessages({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % Math.min(messages.length, 8))
+      setActiveIndex((prev) => (prev + 1) % Math.min(messages.length, 6))
     }, cycleDuration)
 
     return () => clearInterval(interval)
@@ -115,7 +99,7 @@ export function FloatingMessages({
         className
       )}
     >
-      {messages.slice(0, 8).map((message, index) => {
+      {messages.slice(0, 6).map((message, index) => {
         const isActive = index === activeIndex
         const position = positions[index]
         const parallaxY = parallaxTransforms[index]
@@ -124,35 +108,33 @@ export function FloatingMessages({
           <motion.div
             key={index}
             className={cn(
-              "absolute px-4 py-2.5 rounded-2xl text-sm font-medium",
-              "font-sans backdrop-blur-sm",
-              "border border-rose-200/50",
-              "shadow-lg shadow-rose-200/20",
-              "transition-colors duration-500",
+              "absolute px-3 py-2 rounded-xl text-xs font-medium",
+              "font-sans",
+              "transition-all duration-400",
               isActive
-                ? "bg-rose-100/95 text-rose-600 border-rose-300/60"
-                : "bg-white/80 text-zinc-500"
+                ? "bg-rose-400 text-white border-2 border-rose-500 shadow-lg shadow-rose-300/30"
+                : "bg-white/80 text-zinc-400 border border-zinc-200/50 shadow-sm shadow-zinc-200/20"
             )}
             style={{
               top: position.top,
               bottom: position.bottom,
               left: position.left,
               right: position.right,
-              maxWidth: "220px",
+              maxWidth: "180px",
               y: parallaxY,
               rotate: position.rotation,
             }}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{
-              opacity: isActive ? 1 : 0.5,
-              scale: isActive ? 1.03 : 1,
+              opacity: isActive ? 0.95 : 0.45,
+              scale: isActive ? 1.05 : 0.95,
             }}
             transition={{
-              opacity: { duration: 0.4, ease: "easeOut" },
-              scale: { duration: 0.4, ease: "easeOut" },
+              opacity: { duration: 0.3, ease: "easeOut" },
+              scale: { duration: 0.3, ease: "easeOut" },
             }}
             whileInView={{
-              opacity: isActive ? 1 : 0.5,
+              opacity: isActive ? 0.95 : 0.45,
             }}
           >
             {/* Chat bubble tail for active message */}
@@ -160,7 +142,7 @@ export function FloatingMessages({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute -bottom-1.5 left-4 w-3 h-3 bg-rose-100/95 border-b border-r border-rose-300/60 rotate-45"
+                className="absolute -bottom-1.5 left-4 w-3 h-3 bg-rose-400 border-b-2 border-r-2 border-rose-500 rotate-45"
               />
             )}
             <span className="relative z-10">{message}</span>
