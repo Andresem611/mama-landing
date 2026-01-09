@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none">
+  <!-- Mama Mascot: Retro-futuristic mom with phone - Jetsons-inspired line art -->
+
+  <!-- Hair - Bouffant retro style -->
+  <path
+    d="M60 85 C40 60 50 25 100 20 C150 15 165 55 145 85 C160 70 170 45 155 25 C140 5 60 0 45 35 C30 70 45 95 60 85 Z"
+    stroke="#18181B"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Hair details / waves -->
+  <path
+    d="M55 45 Q70 35 85 50"
+    stroke="#18181B"
+    stroke-width="2"
+    stroke-linecap="round"
+    fill="none"
+  />
+  <path
+    d="M115 35 Q130 30 140 45"
+    stroke="#18181B"
+    stroke-width="2"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- Face outline -->
+  <ellipse
+    cx="100"
+    cy="100"
+    rx="42"
+    ry="48"
+    stroke="#18181B"
+    stroke-width="3"
+    fill="none"
+  />
+
+  <!-- Eyes -->
+  <ellipse cx="82" cy="95" rx="8" ry="10" stroke="#18181B" stroke-width="2.5" fill="none"/>
+  <ellipse cx="118" cy="95" rx="8" ry="10" stroke="#18181B" stroke-width="2.5" fill="none"/>
+
+  <!-- Pupils -->
+  <circle cx="84" cy="96" r="4" fill="#18181B"/>
+  <circle cx="120" cy="96" r="4" fill="#18181B"/>
+
+  <!-- Eye shine -->
+  <circle cx="86" cy="94" r="1.5" fill="white"/>
+  <circle cx="122" cy="94" r="1.5" fill="white"/>
+
+  <!-- Eyebrows - expressive arched -->
+  <path d="M72 82 Q82 76 92 82" stroke="#18181B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M108 82 Q118 76 128 82" stroke="#18181B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Eyelashes -->
+  <path d="M74 88 L70 84" stroke="#18181B" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M90 88 L94 84" stroke="#18181B" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M110 88 L106 84" stroke="#18181B" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M126 88 L130 84" stroke="#18181B" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Nose - simple and cute -->
+  <path d="M100 102 L100 112 Q100 116 96 118" stroke="#18181B" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- Smile -->
+  <path d="M85 128 Q100 142 115 128" stroke="#18181B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Cheek blush circles -->
+  <circle cx="68" cy="115" r="8" fill="#FDA4AF" opacity="0.6"/>
+  <circle cx="132" cy="115" r="8" fill="#FDA4AF" opacity="0.6"/>
+
+  <!-- Neck -->
+  <path d="M88 148 L88 165 M112 148 L112 165" stroke="#18181B" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Collar / Blouse top - retro style -->
+  <path
+    d="M50 175 Q65 160 88 165 L100 172 L112 165 Q135 160 150 175 L155 200 L45 200 Z"
+    stroke="#18181B"
+    stroke-width="3"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Collar details -->
+  <path d="M88 165 L95 180 L100 172 L105 180 L112 165" stroke="#18181B" stroke-width="2" stroke-linejoin="round" fill="none"/>
+
+  <!-- Body / Dress -->
+  <path
+    d="M45 200 L35 270 L165 270 L155 200"
+    stroke="#18181B"
+    stroke-width="3"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Dress waist detail -->
+  <path d="M55 220 Q100 215 145 220" stroke="#18181B" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- Left arm (holding phone up to ear) -->
+  <path
+    d="M45 200 Q25 210 20 180 Q18 160 30 145 Q40 135 45 140"
+    stroke="#18181B"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Left hand -->
+  <ellipse cx="42" cy="138" rx="10" ry="12" stroke="#18181B" stroke-width="2.5" fill="none"/>
+
+  <!-- Phone (retro-futuristic style) -->
+  <rect x="30" y="115" width="24" height="45" rx="4" stroke="#18181B" stroke-width="2.5" fill="none"/>
+  <rect x="34" y="120" width="16" height="25" rx="2" stroke="#18181B" stroke-width="1.5" fill="none"/>
+  <circle cx="42" cy="152" r="4" stroke="#18181B" stroke-width="1.5" fill="none"/>
+
+  <!-- Phone signal waves -->
+  <path d="M56 110 Q62 105 56 100" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M62 115 Q72 105 62 95" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/>
+  <path d="M68 120 Q82 105 68 90" stroke="#FB7185" stroke-width="2" stroke-linecap="round" fill="none"/>
+
+  <!-- Right arm (relaxed) -->
+  <path
+    d="M155 200 Q170 215 175 240 Q178 260 165 270"
+    stroke="#18181B"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Right hand -->
+  <ellipse cx="168" cy="268" rx="10" ry="8" stroke="#18181B" stroke-width="2.5" fill="none"/>
+
+  <!-- Earring -->
+  <circle cx="56" cy="110" r="5" stroke="#FCD34D" stroke-width="2" fill="none"/>
+  <circle cx="144" cy="110" r="5" stroke="#FCD34D" stroke-width="2" fill="none"/>
+
+  <!-- Pearl necklace -->
+  <circle cx="85" cy="168" r="3" stroke="#18181B" stroke-width="1.5" fill="none"/>
+  <circle cx="100" cy="172" r="3" stroke="#18181B" stroke-width="1.5" fill="none"/>
+  <circle cx="115" cy="168" r="3" stroke="#18181B" stroke-width="1.5" fill="none"/>
+</svg>
