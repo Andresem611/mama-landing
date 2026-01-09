@@ -117,9 +117,8 @@ export function FloatingMessages({
             )}
             style={{
               top: position.top,
-              bottom: position.bottom,
-              left: position.left,
-              right: position.right,
+              left: "left" in position ? position.left : undefined,
+              right: "right" in position ? position.right : undefined,
               maxWidth: "180px",
               y: parallaxY,
               rotate: position.rotation,
