@@ -61,8 +61,6 @@ export function FinalCTA({ className }: FinalCTAProps) {
           <MamaMascot
             width={120}
             height={168}
-            animate={true}
-            intensity={0.5}
           />
         </motion.div>
 
