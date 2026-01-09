@@ -2,11 +2,12 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import Image from "next/image"
 import { cn } from "@/lib/utils"
 
 interface UseCase {
   title: string
-  icon?: string
+  icon: string // Path to OpenMoji SVG
 }
 
 interface DualCarouselProps {
@@ -16,23 +17,53 @@ interface DualCarouselProps {
 }
 
 const defaultUseCases: UseCase[] = [
-  { title: "Dentist appointments", icon: "🦷" },
-  { title: "Restaurant reservations", icon: "🍽️" },
-  { title: "Doctor's office", icon: "🏥" },
-  { title: "Customer service", icon: "📞" },
-  { title: "Landlord calls", icon: "🏠" },
-  { title: "Utilities", icon: "💡" },
-  { title: "Insurance claims", icon: "📋" },
-  { title: "Bank inquiries", icon: "🏦" },
-  { title: "Pharmacy refills", icon: "💊" },
-  { title: "Appointment changes", icon: "📅" },
+  { title: "Dentist appointments", icon: "/icons/openmoji/tooth.svg" },
+  { title: "Restaurant reservations", icon: "/icons/openmoji/fork-knife-plate.svg" },
+  { title: "Doctor's office", icon: "/icons/openmoji/hospital.svg" },
+  { title: "Customer service", icon: "/icons/openmoji/telephone.svg" },
+  { title: "Landlord calls", icon: "/icons/openmoji/house.svg" },
+  { title: "Utilities", icon: "/icons/openmoji/lightning.svg" },
+  { title: "Salon appointments", icon: "/icons/openmoji/scissors.svg" },
+  { title: "Home repairs", icon: "/icons/openmoji/wrench.svg" },
+  { title: "Pharmacy refills", icon: "/icons/openmoji/pill.svg" },
+  { title: "Bank inquiries", icon: "/icons/openmoji/bank.svg" },
 ]
 
 function UseCaseCard({ useCase }: { useCase: UseCase }) {
   return (
-    <div className="flex items-center gap-3 px-6 py-3 bg-rose-50 rounded-full border border-rose-100 whitespace-nowrap shrink-0">
-      {useCase.icon && <span className="text-lg">{useCase.icon}</span>}
-      <span className="text-zinc-700 font-medium font-quicksand">
+    <div
+      className={cn(
+        "relative flex items-center gap-4 px-6 py-4",
+        "bg-gradient-to-br from-rose-50 via-rose-50 to-rose-100/80",
+        "rounded-2xl border border-rose-200/60",
+        "whitespace-nowrap shrink-0",
+        "shadow-sm hover:shadow-md transition-shadow duration-300"
+      )}
+    >
+      {/* Subtle grain texture overlay */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* OpenMoji Icon */}
+      <div className="relative w-8 h-8 flex-shrink-0">
+        <Image
+          src={useCase.icon}
+          alt=""
+          width={32}
+          height={32}
+          className="w-full h-full object-contain"
+        />
+      </div>
+
+      {/* Title */}
+      <span
+        className="relative text-zinc-700 font-semibold text-base"
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
+      >
         {useCase.title}
       </span>
     </div>
@@ -42,7 +73,7 @@ function UseCaseCard({ useCase }: { useCase: UseCase }) {
 export function DualCarousel({
   className,
   useCases = defaultUseCases,
-  cycleDuration = 30,
+  cycleDuration = 35,
 }: DualCarouselProps) {
   const [isPaused, setIsPaused] = useState(false)
 
@@ -51,8 +82,8 @@ export function DualCarousel({
   const bottomRowCases = useCases.filter((_, i) => i % 2 === 1)
 
   // Duplicate for seamless loop
-  const topRowItems = [...topRowCases, ...topRowCases]
-  const bottomRowItems = [...bottomRowCases, ...bottomRowCases]
+  const topRowItems = [...topRowCases, ...topRowCases, ...topRowCases]
+  const bottomRowItems = [...bottomRowCases, ...bottomRowCases, ...bottomRowCases]
 
   return (
     <div
@@ -62,9 +93,9 @@ export function DualCarousel({
     >
       {/* Top row - scrolls right */}
       <motion.div
-        className="flex gap-4 mb-4"
+        className="flex gap-5 mb-5"
         animate={{
-          x: isPaused ? undefined : ["0%", "-50%"],
+          x: isPaused ? undefined : ["0%", "-33.33%"],
         }}
         transition={{
           x: {
@@ -82,9 +113,9 @@ export function DualCarousel({
 
       {/* Bottom row - scrolls left */}
       <motion.div
-        className="flex gap-4"
+        className="flex gap-5"
         animate={{
-          x: isPaused ? undefined : ["-50%", "0%"],
+          x: isPaused ? undefined : ["-33.33%", "0%"],
         }}
         transition={{
           x: {
