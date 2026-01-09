@@ -2,13 +2,13 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   WordPullUp,
   UnderlineDraw,
   FloatingMessages,
 } from "@/components/animations"
+import { MamaMascot } from "@/components/MamaMascot"
 import { cn } from "@/lib/utils"
 
 interface HeroProps {
@@ -71,7 +71,7 @@ export function Hero({ className }: HeroProps) {
       <div
         className="absolute inset-0"
         style={{
-          background: "linear-gradient(135deg, #FB7185 0%, #F43F5E 50%, #E11D48 100%)",
+          background: "linear-gradient(160deg, #FDA4AF 0%, #FB7185 40%, #F472B6 100%)",
         }}
       />
 
@@ -86,6 +86,22 @@ export function Hero({ className }: HeroProps) {
       {/* Floating Messages - handled by another agent */}
       <FloatingMessages className="absolute inset-0 z-10" />
 
+      {/* Mama Mascot - prominently centered in hero */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+        className="absolute inset-0 flex items-center justify-center z-15 pointer-events-none pt-16"
+      >
+        <MamaMascot
+          width={320}
+          height={448}
+          animate={true}
+          intensity={0.6}
+          className="drop-shadow-2xl sm:scale-100 md:scale-110 lg:scale-125 xl:scale-150"
+        />
+      </motion.div>
+
       {/* Main content container */}
       <div className="relative z-20 min-h-screen flex flex-col justify-end px-6 sm:px-8 lg:px-12 xl:px-16 pb-12 sm:pb-16 lg:pb-20">
 
@@ -96,13 +112,13 @@ export function Hero({ className }: HeroProps) {
           <div className="flex-shrink-0">
             <h1
               className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl text-white leading-[0.95] tracking-tight"
-              style={{ fontFamily: "'Titan One', cursive" }}
+              style={{ fontFamily: "'Righteous', cursive" }}
             >
               <WordPullUp
                 words="Stop asking"
                 className="justify-start"
               />
-              <span className="relative inline-block mt-1 sm:mt-2">
+              <span className="relative inline-block mt-1 sm:mt-2 pb-3 sm:pb-4">
                 <WordPullUp
                   words="your mom."
                   className="justify-start"
@@ -115,8 +131,8 @@ export function Hero({ className }: HeroProps) {
                   <UnderlineDraw
                     delay={0}
                     color="white"
-                    strokeWidth={4}
-                    className="absolute -bottom-1 sm:-bottom-2 left-0 w-full"
+                    strokeWidth={5}
+                    className="absolute bottom-0 left-0 w-full"
                   />
                 )}
               </span>
@@ -131,7 +147,7 @@ export function Hero({ className }: HeroProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.4 }}
               className="text-lg sm:text-xl text-white/90 mb-6 leading-relaxed"
-              style={{ fontFamily: "'Quicksand', sans-serif" }}
+              style={{ fontFamily: "'Nunito', sans-serif" }}
             >
               AI that makes the phone calls you hate. Dentist appointments, restaurant reservations, customer service.
             </motion.p>
@@ -147,7 +163,7 @@ export function Hero({ className }: HeroProps) {
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="bg-white/20 backdrop-blur-sm text-white px-6 py-4 rounded-2xl font-medium border border-white/30"
-                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                  style={{ fontFamily: "'Nunito', sans-serif" }}
                 >
                   You are on the list! We will be in touch soon.
                 </motion.div>
@@ -163,22 +179,51 @@ export function Hero({ className }: HeroProps) {
                     onChange={(e) => setEmail(e.target.value)}
                     required
                     className="flex-1 h-12 sm:h-14 px-5 rounded-full bg-white/95 border-0 text-zinc-900 placeholder:text-zinc-400 focus:ring-2 focus:ring-white/50 focus:bg-white shadow-lg"
-                    style={{ fontFamily: "'Quicksand', sans-serif" }}
+                    style={{ fontFamily: "'Nunito', sans-serif" }}
                   />
-                  <motion.div
-                    whileHover={{ scale: 1.03, y: -2 }}
-                    whileTap={{ scale: 0.97, y: 0 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={cn(
+                      // Base retro pill shape
+                      "relative h-12 sm:h-14 px-8 rounded-full",
+                      "font-bold text-base",
+                      // Retro thick border
+                      "border-[3px] border-zinc-900",
+                      // Background and text
+                      "bg-gradient-to-b from-zinc-800 to-zinc-900 text-white",
+                      // 3D shadow effect (arcade button style)
+                      "shadow-[0_4px_0_0_#18181b,0_6px_12px_rgba(24,24,27,0.4)]",
+                      // Smooth transitions
+                      "transition-all duration-150 ease-out",
+                      // Focus styles
+                      "outline-none focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2",
+                      // Disabled state
+                      "disabled:opacity-70"
+                    )}
+                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                    whileHover={{
+                      scale: 1.05,
+                      y: -2,
+                      boxShadow: "0 6px 0 0 #18181b, 0 8px 20px rgba(24,24,27,0.5)",
+                    }}
+                    whileTap={{
+                      scale: 0.98,
+                      y: 2,
+                      boxShadow: "0 1px 0 0 #18181b, 0 2px 4px rgba(24,24,27,0.2)",
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 500,
+                      damping: 20,
+                    }}
                   >
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="h-12 sm:h-14 px-8 rounded-full bg-zinc-900 hover:bg-zinc-800 text-white font-bold text-base shadow-xl shadow-zinc-900/30 disabled:opacity-70 transition-colors"
-                      style={{ fontFamily: "'Quicksand', sans-serif" }}
-                    >
+                    {/* Subtle inner glow/highlight for retro effect */}
+                    <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
+                    <span className="relative z-10">
                       {isSubmitting ? "Joining..." : "Join MAMA"}
-                    </Button>
-                  </motion.div>
+                    </span>
+                  </motion.button>
                 </form>
               )}
 
@@ -188,7 +233,7 @@ export function Hero({ className }: HeroProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="text-white/80 text-sm mt-3"
-                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                  style={{ fontFamily: "'Nunito', sans-serif" }}
                 >
                   {error}
                 </motion.p>
@@ -201,7 +246,7 @@ export function Hero({ className }: HeroProps) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.8 }}
               className="text-sm text-white/70 mt-4"
-              style={{ fontFamily: "'Quicksand', sans-serif" }}
+              style={{ fontFamily: "'Nunito', sans-serif" }}
             >
               No spam. Just less phone anxiety.
             </motion.p>

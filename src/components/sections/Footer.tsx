@@ -20,7 +20,7 @@ export function Footer({ className }: FooterProps) {
         {/* Logo */}
         <div
           className="text-2xl md:text-3xl text-rose-400"
-          style={{ fontFamily: "'Titan One', cursive" }}
+          style={{ fontFamily: "'Righteous', cursive" }}
         >
           Mama
         </div>

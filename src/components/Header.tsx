@@ -25,8 +25,9 @@ export function Header({ className }: HeaderProps) {
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50",
-        "backdrop-blur-md bg-white/70",
-        "border-b border-rose-100/50",
+        "bg-white",
+        "border-b border-rose-100",
+        "shadow-sm",
         className
       )}
     >
@@ -38,7 +39,7 @@ export function Header({ className }: HeaderProps) {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="text-2xl md:text-3xl text-rose-400 tracking-wide"
-          style={{ fontFamily: "'Titan One', cursive" }}
+          style={{ fontFamily: "'Righteous', cursive" }}
         >
           MAMA
         </motion.a>
@@ -57,8 +58,8 @@ export function Header({ className }: HeaderProps) {
               "font-semibold text-sm md:text-base",
               // Retro thick border
               "border-[3px] border-rose-400",
-              // Background and text
-              "bg-gradient-to-b from-rose-50 to-rose-100 text-rose-500",
+              // Background and text - solid white, no gradient
+              "bg-white text-rose-500",
               // 3D shadow effect (arcade button style)
               "shadow-[0_4px_0_0_#e11d48,0_6px_12px_rgba(225,29,72,0.3)]",
               // Smooth transitions
@@ -82,8 +83,7 @@ export function Header({ className }: HeaderProps) {
               damping: 20,
             }}
           >
-            {/* Subtle inner glow/highlight for retro effect */}
-            <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/40 pointer-events-none" />
+{/* Clean button - no inner gradient overlay */}
 
             {/* Button text */}
             <span className="relative z-10">Join Waitlist</span>

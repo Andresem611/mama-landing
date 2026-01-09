@@ -18,13 +18,13 @@ export function UnderlineDraw({
 }: UnderlineDrawProps) {
   return (
     <motion.svg
-      viewBox="0 0 200 20"
-      className={cn("absolute -bottom-2 left-0 w-full h-auto", className)}
+      viewBox="0 0 200 24"
+      className={cn("w-full h-6 sm:h-8", className)}
       preserveAspectRatio="none"
     >
-      {/* Hand-drawn wavy line effect using quadratic bezier curves */}
+      {/* Hand-drawn wavy line effect - more pronounced wave */}
       <motion.path
-        d="M0 10 Q25 5, 50 10 T100 10 T150 10 T200 10"
+        d="M0 12 Q30 4, 60 12 T120 12 T180 12 L200 12"
         stroke={color}
         strokeWidth={strokeWidth}
         fill="none"

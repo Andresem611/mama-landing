@@ -16,45 +16,69 @@ const defaultMessages = [
   "Can you schedule my appointment?",
   "I get shy on the phone...",
   "Mom, can you do it for me?",
+  "I hate being on hold",
+  "Can someone else call?",
+  "Phone calls give me anxiety",
 ]
 
-// Viewport-spread positions: corners and edges for immersive scattered feel
+// Positions adjusted to be BELOW header (header ~64px = ~10% on most screens)
 // Each position includes parallax speed multiplier for depth effect
 const positions = [
-  // Top-left corner
+  // Top-left - below header
   {
-    top: "8%",
-    left: "4%",
+    top: "14%",
+    left: "6%",
     parallaxSpeed: 0.15,
-    rotation: -6,
+    rotation: -4,
   },
-  // Top-right corner
+  // Top-right - below header
   {
-    top: "12%",
-    right: "6%",
+    top: "11%",
+    right: "18%",
     parallaxSpeed: 0.25,
+    rotation: 3,
+  },
+  // Right side - upper middle
+  {
+    top: "30%",
+    right: "4%",
+    parallaxSpeed: 0.2,
     rotation: 4,
   },
-  // Left edge (middle-ish)
+  // Left side - mid-upper
   {
-    top: "45%",
+    top: "26%",
     left: "2%",
     parallaxSpeed: 0.1,
     rotation: -3,
   },
-  // Right edge (middle-ish)
+  // Bottom-right area
   {
-    top: "40%",
-    right: "3%",
-    parallaxSpeed: 0.2,
-    rotation: 5,
-  },
-  // Bottom-left
-  {
-    bottom: "15%",
-    left: "8%",
+    top: "48%",
+    right: "6%",
     parallaxSpeed: 0.18,
-    rotation: -4,
+    rotation: 2,
+  },
+  // Bottom-left area
+  {
+    top: "52%",
+    left: "5%",
+    parallaxSpeed: 0.12,
+    rotation: -2,
+  },
+  // Mid-right, lower
+  {
+    top: "42%",
+    right: "15%",
+    parallaxSpeed: 0.22,
+    rotation: 1,
+  },
+  // Top center-left
+  {
+    top: "18%",
+    left: "25%",
+    parallaxSpeed: 0.16,
+    rotation: -1,
   },
 ]
 
@@ -71,7 +95,7 @@ export function FloatingMessages({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % Math.min(messages.length, 5))
+      setActiveIndex((prev) => (prev + 1) % Math.min(messages.length, 8))
     }, cycleDuration)
 
     return () => clearInterval(interval)
@@ -91,7 +115,7 @@ export function FloatingMessages({
         className
       )}
     >
-      {messages.slice(0, 5).map((message, index) => {
+      {messages.slice(0, 8).map((message, index) => {
         const isActive = index === activeIndex
         const position = positions[index]
         const parallaxY = parallaxTransforms[index]
