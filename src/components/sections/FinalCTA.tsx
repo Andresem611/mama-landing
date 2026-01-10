@@ -1,8 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
-import { Input } from "@/components/ui/input"
 import { MamaMascot } from "@/components/MamaMascot"
 import { cn } from "@/lib/utils"
 
@@ -11,36 +10,6 @@ interface FinalCTAProps {
 }
 
 export function FinalCTA({ className }: FinalCTAProps) {
-  const [email, setEmail] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
-
-    setIsSubmitting(true)
-
-    try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      })
-
-      if (response.ok || response.status === 200) {
-        setSubmitted(true)
-        setEmail("")
-      }
-    } catch {
-      // Silently fail - user can try again
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
   return (
     <section
       className={cn(
@@ -83,86 +52,59 @@ export function FinalCTA({ className }: FinalCTAProps) {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-zinc-600 text-lg mb-8 max-w-md mx-auto"
-          style={{ fontFamily: "'Nunito', sans-serif" }}
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
-          Join the waitlist and let Mama handle the phone calls you dread.
+          Sign up and let Mama handle the phone calls you dread.
         </motion.p>
 
-        {/* Waitlist Form */}
+        {/* Sign Up Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          {submitted ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-white text-rose-600 px-6 py-4 rounded-2xl font-medium shadow-sm border border-rose-100"
-              style={{ fontFamily: "'Nunito', sans-serif" }}
+          <Link href="/login">
+            <motion.span
+              className={cn(
+                // Base retro pill shape
+                "relative inline-flex items-center justify-center h-12 px-8 rounded-full",
+                "font-bold text-base",
+                // Retro thick border
+                "border-[3px] border-zinc-900",
+                // Background and text
+                "bg-gradient-to-b from-zinc-800 to-zinc-900 text-white",
+                // 3D shadow effect (arcade button style)
+                "shadow-[0_4px_0_0_#18181b,0_6px_12px_rgba(24,24,27,0.4)]",
+                // Smooth transitions
+                "transition-all duration-150 ease-out",
+                // Focus styles
+                "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2"
+              )}
+              style={{ fontFamily: "'Quicksand', sans-serif" }}
+              whileHover={{
+                scale: 1.05,
+                y: -2,
+                boxShadow: "0 6px 0 0 #18181b, 0 8px 20px rgba(24,24,27,0.5)",
+              }}
+              whileTap={{
+                scale: 0.98,
+                y: 2,
+                boxShadow: "0 1px 0 0 #18181b, 0 2px 4px rgba(24,24,27,0.2)",
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 500,
+                damping: 20,
+              }}
             >
-              You are on the list! We will be in touch soon.
-            </motion.div>
-          ) : (
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="flex-1 h-12 px-5 rounded-full border-rose-200 bg-white focus:border-rose-300 focus:ring-rose-300/50"
-                style={{ fontFamily: "'Nunito', sans-serif" }}
-              />
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                className={cn(
-                  // Base retro pill shape
-                  "relative h-12 px-8 rounded-full",
-                  "font-bold text-base",
-                  // Retro thick border
-                  "border-[3px] border-zinc-900",
-                  // Background and text
-                  "bg-gradient-to-b from-zinc-800 to-zinc-900 text-white",
-                  // 3D shadow effect (arcade button style)
-                  "shadow-[0_4px_0_0_#18181b,0_6px_12px_rgba(24,24,27,0.4)]",
-                  // Smooth transitions
-                  "transition-all duration-150 ease-out",
-                  // Focus styles
-                  "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2",
-                  // Disabled state
-                  "disabled:opacity-70"
-                )}
-                style={{ fontFamily: "'Nunito', sans-serif" }}
-                whileHover={{
-                  scale: 1.05,
-                  y: -2,
-                  boxShadow: "0 6px 0 0 #18181b, 0 8px 20px rgba(24,24,27,0.5)",
-                }}
-                whileTap={{
-                  scale: 0.98,
-                  y: 2,
-                  boxShadow: "0 1px 0 0 #18181b, 0 2px 4px rgba(24,24,27,0.2)",
-                }}
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 20,
-                }}
-              >
-                {/* Subtle inner glow/highlight for retro effect */}
-                <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
-                <span className="relative z-10">
-                  {isSubmitting ? "Joining..." : "Join MAMA"}
-                </span>
-              </motion.button>
-            </form>
-          )}
+              {/* Subtle inner glow/highlight for retro effect */}
+              <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
+              <span className="relative z-10">
+                Sign Up Free
+              </span>
+            </motion.span>
+          </Link>
         </motion.div>
 
         {/* Privacy note */}
@@ -172,7 +114,7 @@ export function FinalCTA({ className }: FinalCTAProps) {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-sm text-zinc-500 mt-4"
-          style={{ fontFamily: "'Nunito', sans-serif" }}
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
           No spam. Just less phone anxiety.
         </motion.p>

@@ -83,9 +83,9 @@ Landing page for Mama — a consumer voice AI that makes phone calls for Gen Z u
 
 | Element | Font | Size (Desktop) | Size (Mobile) | Weight |
 |---------|------|----------------|---------------|--------|
-| Display | Titan One | 64-72px | 40px | 400 |
-| H1 | Titan One | 48px | 32px | 400 |
-| H2 | Titan One | 36px | 28px | 400 |
+| Display | Righteous | 64-72px | 40px | 400 |
+| H1 | Righteous | 48px | 32px | 400 |
+| H2 | Righteous | 36px | 28px | 400 |
 | H3 | Quicksand | 24px | 20px | 600 |
 | Body | Quicksand | 16-18px | 16px | 400-500 |
 | Button | Quicksand | 16px | 14px | 600 |
@@ -410,7 +410,7 @@ const buttonVariants = {
 | **Animation** | Motion (Framer Motion) | Best React integration, declarative API |
 | **Waitlist** | Supabase | Free tier, simple table, expandable for backend |
 | **Email** | Resend | Clean API, works with Supabase |
-| **Fonts** | Google Fonts (Titan One, Quicksand) | Brand typography |
+| **Fonts** | Google Fonts (Righteous, Quicksand) | Brand typography |
 | **Deployment** | Vercel | Zero-config for Next.js |
 | **Analytics** | PostHog (optional) | Privacy-friendly |
 

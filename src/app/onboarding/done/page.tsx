@@ -6,9 +6,19 @@ import { useOnboarding } from '@/context/OnboardingContext'
 
 const buttonSpring = {
   type: 'spring' as const,
-  stiffness: 400,
-  damping: 17
+  stiffness: 500,
+  damping: 20
 }
+
+// Secondary CTA button styles (dark, for share action)
+const secondaryCtaClasses = `
+  relative h-14 px-8 rounded-full
+  font-bold text-base
+  border-[3px] border-zinc-700
+  bg-gradient-to-b from-zinc-800 to-zinc-900 text-white
+  shadow-[0_4px_0_0_#18181B,0_6px_12px_rgba(0,0,0,0.3)]
+  transition-all duration-150 ease-out
+`
 
 export default function DonePage() {
   const { state } = useOnboarding()
@@ -51,7 +61,8 @@ export default function DonePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="font-titan text-3xl md:text-4xl text-zinc-900"
+          className="text-3xl md:text-4xl text-zinc-900"
+          style={{ fontFamily: "'Righteous', cursive" }}
         >
           Consider it handled
         </motion.h1>
@@ -59,7 +70,8 @@ export default function DonePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="font-quicksand text-zinc-600"
+          className="text-zinc-600"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
           Relax. I&apos;ve got this from here.
         </motion.p>
@@ -72,13 +84,22 @@ export default function DonePage() {
         transition={{ delay: 0.5 }}
         className="bg-rose-50 rounded-2xl p-6 space-y-3"
       >
-        <p className="font-quicksand text-zinc-700">
+        <p
+          className="text-zinc-700"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           We&apos;ll text you at
         </p>
-        <p className="font-quicksand text-2xl font-bold text-rose-500">
+        <p
+          className="text-2xl font-bold text-rose-500"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           {state.preferences.phone || '(555) 555-5555'}
         </p>
-        <p className="font-quicksand text-zinc-500 text-sm">
+        <p
+          className="text-zinc-500 text-sm"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           when you&apos;re off the waitlist
         </p>
       </motion.div>
@@ -90,17 +111,30 @@ export default function DonePage() {
         transition={{ delay: 0.6 }}
         className="space-y-4"
       >
-        <p className="font-quicksand text-zinc-600">
+        <p
+          className="text-zinc-600"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           Want to move up the list?
         </p>
         <motion.button
-          whileHover={{ scale: 1.02, y: -2 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{
+            scale: 1.05,
+            y: -2,
+            boxShadow: "0 6px 0 0 #18181B, 0 8px 20px rgba(0,0,0,0.4)",
+          }}
+          whileTap={{
+            scale: 0.98,
+            y: 2,
+            boxShadow: "0 1px 0 0 #18181B, 0 2px 4px rgba(0,0,0,0.2)",
+          }}
           transition={buttonSpring}
           onClick={handleShare}
-          className="w-full bg-zinc-900 text-white rounded-full py-4 font-quicksand font-semibold transition-colors hover:bg-zinc-800"
+          className={`w-full ${secondaryCtaClasses}`}
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
-          Tell your friends
+          <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/5 pointer-events-none" />
+          <span className="relative z-10">Tell your friends</span>
         </motion.button>
       </motion.div>
 
@@ -112,7 +146,8 @@ export default function DonePage() {
       >
         <Link
           href="/"
-          className="inline-block font-quicksand text-rose-400 hover:text-rose-500 transition-colors"
+          className="inline-block text-rose-400 hover:text-rose-500 transition-colors"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
           ← Back to home
         </Link>

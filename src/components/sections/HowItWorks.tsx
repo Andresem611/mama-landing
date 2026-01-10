@@ -57,7 +57,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
           </h2>
           <p
             className="text-zinc-600 text-lg max-w-lg mx-auto"
-            style={{ fontFamily: "'Nunito', sans-serif" }}
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
           >
             Three simple steps to never make a dreaded phone call again.
           </p>
@@ -98,7 +98,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
                 <div className="flex justify-center mb-4">
                   <span
                     className="inline-flex items-center px-3 py-1 rounded-full bg-rose-100 text-rose-500 text-xs font-bold uppercase tracking-wider"
-                    style={{ fontFamily: "'Nunito', sans-serif" }}
+                    style={{ fontFamily: "'Quicksand', sans-serif" }}
                   >
                     Step {step.number}
                   </span>
@@ -115,7 +115,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
                 {/* Description */}
                 <p
                   className="text-zinc-600 text-center text-sm lg:text-base leading-relaxed"
-                  style={{ fontFamily: "'Nunito', sans-serif" }}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
                 >
                   {step.description}
                 </p>
@@ -134,7 +134,7 @@ export function HowItWorks({ className }: HowItWorksProps) {
         >
           <p
             className="text-zinc-500 text-lg md:text-xl italic"
-            style={{ fontFamily: "'Nunito', sans-serif" }}
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
           >
             Embarrassing? Sure.{" "}
             <span className="text-rose-400 font-semibold not-italic">

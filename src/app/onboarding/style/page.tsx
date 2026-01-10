@@ -10,8 +10,26 @@ import { createClient } from '@/lib/supabase/client'
 
 const buttonSpring = {
   type: 'spring' as const,
-  stiffness: 400,
-  damping: 17
+  stiffness: 500,
+  damping: 20
+}
+
+// Primary CTA button styles (arcade style matching landing page)
+const primaryCtaClasses = `
+  relative h-14 px-8 rounded-full
+  font-bold text-base
+  border-[3px] border-rose-500
+  bg-gradient-to-b from-rose-400 to-rose-500 text-white
+  shadow-[0_4px_0_0_#be123c,0_6px_12px_rgba(225,29,72,0.4)]
+  transition-all duration-150 ease-out
+  disabled:opacity-50 disabled:cursor-not-allowed
+`
+
+// List-style selection buttons (for options with descriptions)
+const listButtonClasses = {
+  base: `w-full py-3 px-4 rounded-2xl text-left transition-all duration-300`,
+  selected: `bg-rose-400 text-white shadow-lg shadow-rose-900/20`,
+  unselected: `bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl`,
 }
 
 export default function StylePage() {
@@ -52,10 +70,16 @@ export default function StylePage() {
     >
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="font-titan text-3xl md:text-4xl text-zinc-900">
+        <h1
+          className="text-3xl md:text-4xl text-zinc-900"
+          style={{ fontFamily: "'Righteous', cursive" }}
+        >
           What&apos;s my vibe?
         </h1>
-        <p className="font-quicksand text-zinc-600">
+        <p
+          className="text-zinc-600"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           Tune me up.
         </p>
       </div>
@@ -64,7 +88,10 @@ export default function StylePage() {
       <div className="space-y-6">
         {/* Persistence Slider */}
         <div className="space-y-3">
-          <label className="font-quicksand font-semibold text-zinc-900">
+          <label
+            className="font-semibold text-zinc-900"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
             How persistent should I be?
           </label>
           <div className="space-y-2">
@@ -78,7 +105,10 @@ export default function StylePage() {
                 className="w-full h-2 bg-rose-100 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-rose-400 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-rose-400 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0"
               />
             </div>
-            <div className="flex justify-between text-sm font-quicksand text-zinc-400">
+            <div
+              className="flex justify-between text-sm text-zinc-400"
+              style={{ fontFamily: "'Quicksand', sans-serif" }}
+            >
               <span>{persistenceLabels[0]}</span>
               <span className="text-rose-500 font-semibold">{state.preferences.persistence ?? 3}/5</span>
               <span>{persistenceLabels[4]}</span>
@@ -88,79 +118,97 @@ export default function StylePage() {
 
         {/* Flexibility */}
         <div className="space-y-3">
-          <label className="font-quicksand font-semibold text-zinc-900">
+          <label
+            className="font-semibold text-zinc-900"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
             Okay with alternatives?
           </label>
           <div className="space-y-2">
-            {FLEXIBILITY_OPTIONS.map((option) => (
-              <motion.button
-                key={option.id}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                transition={buttonSpring}
-                onClick={() => updatePreferences({ flexibility: option.id })}
-                className={`w-full py-3 px-4 rounded-2xl font-quicksand text-left transition-colors ${
-                  state.preferences.flexibility === option.id
-                    ? 'bg-rose-400 text-white'
-                    : 'bg-rose-50 text-zinc-600 hover:bg-rose-100'
-                }`}
-              >
-                <span className="font-semibold">{option.label}</span>
-                <span className={`text-sm ml-2 ${
-                  state.preferences.flexibility === option.id
-                    ? 'text-white/80'
-                    : 'text-zinc-400'
-                }`}>
-                  — {option.description}
-                </span>
-              </motion.button>
-            ))}
+            {FLEXIBILITY_OPTIONS.map((option) => {
+              const isSelected = state.preferences.flexibility === option.id
+              return (
+                <motion.button
+                  key={option.id}
+                  whileHover={{ scale: 1.01, y: -1 }}
+                  whileTap={{ scale: 0.99 }}
+                  transition={buttonSpring}
+                  onClick={() => updatePreferences({ flexibility: option.id })}
+                  className={`${listButtonClasses.base} ${
+                    isSelected ? listButtonClasses.selected : listButtonClasses.unselected
+                  }`}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                >
+                  <span className="font-semibold">{option.label}</span>
+                  <span className={`text-sm ml-2 ${
+                    isSelected ? 'text-white/80' : 'text-zinc-400'
+                  }`}>
+                    — {option.description}
+                  </span>
+                </motion.button>
+              )
+            })}
           </div>
         </div>
 
         {/* Agency */}
         <div className="space-y-3">
-          <label className="font-quicksand font-semibold text-zinc-900">
+          <label
+            className="font-semibold text-zinc-900"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
             How much can Mama decide?
           </label>
           <div className="space-y-2">
-            {AGENCY_OPTIONS.map((option) => (
-              <motion.button
-                key={option.id}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                transition={buttonSpring}
-                onClick={() => updatePreferences({ agency: option.id })}
-                className={`w-full py-3 px-4 rounded-2xl font-quicksand text-left transition-colors ${
-                  state.preferences.agency === option.id
-                    ? 'bg-rose-400 text-white'
-                    : 'bg-rose-50 text-zinc-600 hover:bg-rose-100'
-                }`}
-              >
-                <span className="font-semibold">{option.label}</span>
-                <span className={`text-sm ml-2 ${
-                  state.preferences.agency === option.id
-                    ? 'text-white/80'
-                    : 'text-zinc-400'
-                }`}>
-                  — {option.description}
-                </span>
-              </motion.button>
-            ))}
+            {AGENCY_OPTIONS.map((option) => {
+              const isSelected = state.preferences.agency === option.id
+              return (
+                <motion.button
+                  key={option.id}
+                  whileHover={{ scale: 1.01, y: -1 }}
+                  whileTap={{ scale: 0.99 }}
+                  transition={buttonSpring}
+                  onClick={() => updatePreferences({ agency: option.id })}
+                  className={`${listButtonClasses.base} ${
+                    isSelected ? listButtonClasses.selected : listButtonClasses.unselected
+                  }`}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                >
+                  <span className="font-semibold">{option.label}</span>
+                  <span className={`text-sm ml-2 ${
+                    isSelected ? 'text-white/80' : 'text-zinc-400'
+                  }`}>
+                    — {option.description}
+                  </span>
+                </motion.button>
+              )
+            })}
           </div>
         </div>
       </div>
 
-      {/* Continue Button */}
+      {/* Continue Button - Arcade Style */}
       <motion.button
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{
+          scale: 1.05,
+          y: -2,
+          boxShadow: "0 6px 0 0 #be123c, 0 8px 20px rgba(225,29,72,0.5)",
+        }}
+        whileTap={{
+          scale: 0.98,
+          y: 2,
+          boxShadow: "0 1px 0 0 #be123c, 0 2px 4px rgba(225,29,72,0.2)",
+        }}
         transition={buttonSpring}
         onClick={handleContinue}
         disabled={loading}
-        className="w-full bg-rose-400 text-white rounded-full py-4 font-quicksand font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-rose-300"
+        className={`w-full ${primaryCtaClasses}`}
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
-        {loading ? 'Saving...' : 'Continue'}
+        <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
+        <span className="relative z-10">
+          {loading ? 'Saving...' : 'Continue'}
+        </span>
       </motion.button>
 
       {/* Progress Dots */}

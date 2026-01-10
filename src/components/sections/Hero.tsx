@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion } from "framer-motion"
-import { Input } from "@/components/ui/input"
 import {
   WordPullUp,
   UnderlineDraw,
@@ -16,42 +16,7 @@ interface HeroProps {
 }
 
 export function Hero({ className }: HeroProps) {
-  const [email, setEmail] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-  const [error, setError] = useState("")
   const [showUnderline, setShowUnderline] = useState(false)
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email) return
-
-    setIsSubmitting(true)
-    setError("")
-
-    try {
-      const response = await fetch("/api/waitlist", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok && response.status !== 200) {
-        throw new Error(data.error || "Something went wrong")
-      }
-
-      setSubmitted(true)
-      setEmail("")
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
 
   // Animation timing constants
   // First line "Stop asking" = 2 words * 0.15s delay each = 0.3s total stagger
@@ -154,97 +119,58 @@ export function Hero({ className }: HeroProps) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.4 }}
               className="text-lg sm:text-xl text-zinc-600 mb-6 leading-relaxed"
-              style={{ fontFamily: "'Nunito', sans-serif" }}
+              style={{ fontFamily: "'Quicksand', sans-serif" }}
             >
               AI that makes the phone calls you hate. Dentist appointments, restaurant reservations, customer service.
             </motion.p>
 
-            {/* Waitlist Form */}
+            {/* Get Started Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 1.6 }}
             >
-              {submitted ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="bg-rose-100 text-rose-700 px-6 py-4 rounded-2xl font-medium border border-rose-200"
-                  style={{ fontFamily: "'Nunito', sans-serif" }}
+              <Link href="/login">
+                <motion.span
+                  className={cn(
+                    // Base retro pill shape
+                    "relative inline-flex items-center justify-center h-12 sm:h-14 px-8 rounded-full",
+                    "font-bold text-base",
+                    // Retro thick border
+                    "border-[3px] border-rose-500",
+                    // Background and text
+                    "bg-gradient-to-b from-rose-400 to-rose-500 text-white",
+                    // 3D shadow effect (arcade button style)
+                    "shadow-[0_4px_0_0_#be123c,0_6px_12px_rgba(225,29,72,0.4)]",
+                    // Smooth transitions
+                    "transition-all duration-150 ease-out",
+                    // Focus styles
+                    "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2"
+                  )}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                  whileHover={{
+                    scale: 1.05,
+                    y: -2,
+                    boxShadow: "0 6px 0 0 #be123c, 0 8px 20px rgba(225,29,72,0.5)",
+                  }}
+                  whileTap={{
+                    scale: 0.98,
+                    y: 2,
+                    boxShadow: "0 1px 0 0 #be123c, 0 2px 4px rgba(225,29,72,0.2)",
+                  }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 500,
+                    damping: 20,
+                  }}
                 >
-                  You are on the list! We will be in touch soon.
-                </motion.div>
-              ) : (
-                <form
-                  onSubmit={handleSubmit}
-                  className="flex flex-col sm:flex-row gap-3"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="flex-1 h-12 sm:h-14 px-5 rounded-full bg-white border-2 border-zinc-200 text-zinc-900 placeholder:text-zinc-400 focus:ring-2 focus:ring-rose-200 focus:border-rose-300 shadow-md"
-                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                  />
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={cn(
-                      // Base retro pill shape
-                      "relative h-12 sm:h-14 px-8 rounded-full",
-                      "font-bold text-base",
-                      // Retro thick border
-                      "border-[3px] border-rose-500",
-                      // Background and text
-                      "bg-gradient-to-b from-rose-400 to-rose-500 text-white",
-                      // 3D shadow effect (arcade button style)
-                      "shadow-[0_4px_0_0_#be123c,0_6px_12px_rgba(225,29,72,0.4)]",
-                      // Smooth transitions
-                      "transition-all duration-150 ease-out",
-                      // Focus styles
-                      "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2",
-                      // Disabled state
-                      "disabled:opacity-70"
-                    )}
-                    style={{ fontFamily: "'Nunito', sans-serif" }}
-                    whileHover={{
-                      scale: 1.05,
-                      y: -2,
-                      boxShadow: "0 6px 0 0 #be123c, 0 8px 20px rgba(225,29,72,0.5)",
-                    }}
-                    whileTap={{
-                      scale: 0.98,
-                      y: 2,
-                      boxShadow: "0 1px 0 0 #be123c, 0 2px 4px rgba(225,29,72,0.2)",
-                    }}
-                    transition={{
-                      type: "spring",
-                      stiffness: 500,
-                      damping: 20,
-                    }}
-                  >
-                    {/* Subtle inner glow/highlight for retro effect */}
-                    <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
-                    <span className="relative z-10">
-                      {isSubmitting ? "Joining..." : <>Join <span style={{ fontFamily: "'Righteous', cursive" }}>MAMA</span></>}
-                    </span>
-                  </motion.button>
-                </form>
-              )}
-
-              {/* Error message */}
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="text-rose-600 text-sm mt-3"
-                  style={{ fontFamily: "'Nunito', sans-serif" }}
-                >
-                  {error}
-                </motion.p>
-              )}
+                  {/* Subtle inner glow/highlight for retro effect */}
+                  <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
+                  <span className="relative z-10">
+                    Get Started
+                  </span>
+                </motion.span>
+              </Link>
             </motion.div>
 
             {/* Privacy note */}
@@ -253,7 +179,7 @@ export function Hero({ className }: HeroProps) {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.8 }}
               className="text-sm text-zinc-500 mt-4"
-              style={{ fontFamily: "'Nunito', sans-serif" }}
+              style={{ fontFamily: "'Quicksand', sans-serif" }}
             >
               No spam. Just less phone anxiety.
             </motion.p>

@@ -54,7 +54,7 @@ function UseCaseCard({ useCase }: { useCase: UseCase }) {
       {/* Title */}
       <span
         className="relative text-zinc-700 font-semibold text-base"
-        style={{ fontFamily: "'Nunito', sans-serif" }}
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {useCase.title}
       </span>

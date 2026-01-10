@@ -23,8 +23,26 @@ const USE_CASES = [
 
 const buttonSpring = {
   type: 'spring' as const,
-  stiffness: 400,
-  damping: 17
+  stiffness: 500,
+  damping: 20
+}
+
+// Primary CTA button styles (arcade style matching landing page)
+const primaryCtaClasses = `
+  relative h-14 px-8 rounded-full
+  font-bold text-base
+  border-[3px] border-rose-500
+  bg-gradient-to-b from-rose-400 to-rose-500 text-white
+  shadow-[0_4px_0_0_#be123c,0_6px_12px_rgba(225,29,72,0.4)]
+  transition-all duration-150 ease-out
+  disabled:opacity-50 disabled:cursor-not-allowed
+`
+
+// Selection pill styles (matching DualCarousel)
+const selectionPillClasses = {
+  base: `py-3 px-4 rounded-2xl font-medium transition-all duration-300 flex items-center gap-3`,
+  selected: `bg-rose-400 text-white shadow-lg shadow-rose-900/20`,
+  unselected: `bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl`,
 }
 
 export default function CallsPage() {
@@ -74,10 +92,16 @@ export default function CallsPage() {
     >
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="font-titan text-3xl md:text-4xl text-zinc-900">
+        <h1
+          className="text-3xl md:text-4xl text-zinc-900"
+          style={{ fontFamily: "'Righteous', cursive" }}
+        >
           The dreaded calls list
         </h1>
-        <p className="font-quicksand text-zinc-600">
+        <p
+          className="text-zinc-600"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
           Be honest. I won&apos;t judge.
         </p>
       </div>
@@ -86,7 +110,10 @@ export default function CallsPage() {
       <div className="space-y-6">
         {/* Use Cases - Grid of Pill Buttons with Icons */}
         <div className="space-y-3">
-          <label className="font-quicksand font-semibold text-zinc-900">
+          <label
+            className="font-semibold text-zinc-900"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
             Select all that apply
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -99,17 +126,16 @@ export default function CallsPage() {
                   whileTap={{ scale: 0.98 }}
                   transition={buttonSpring}
                   onClick={() => toggleUseCase(option.id)}
-                  className={`py-3 px-4 rounded-2xl font-quicksand text-sm font-medium transition-colors flex items-center gap-2 ${
-                    isSelected
-                      ? 'bg-rose-400 text-white'
-                      : 'bg-rose-50 text-zinc-600 hover:bg-rose-100 border-2 border-transparent'
+                  className={`${selectionPillClasses.base} ${
+                    isSelected ? selectionPillClasses.selected : selectionPillClasses.unselected
                   }`}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
                 >
                   <Image
                     src={option.icon}
                     alt=""
-                    width={24}
-                    height={24}
+                    width={32}
+                    height={32}
                     className={isSelected ? 'brightness-0 invert' : ''}
                   />
                   <span>{option.label}</span>
@@ -121,40 +147,59 @@ export default function CallsPage() {
 
         {/* Frequency */}
         <div className="space-y-3">
-          <label className="font-quicksand font-semibold text-zinc-900">
+          <label
+            className="font-semibold text-zinc-900"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
             How often would you use Mama?
           </label>
           <div className="grid grid-cols-2 gap-3">
-            {FREQUENCY_OPTIONS.map((option) => (
-              <motion.button
-                key={option.id}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                transition={buttonSpring}
-                onClick={() => updatePreferences({ frequency: option.id })}
-                className={`py-3 px-4 rounded-2xl font-quicksand font-medium transition-colors ${
-                  state.preferences.frequency === option.id
-                    ? 'bg-rose-400 text-white'
-                    : 'bg-rose-50 text-zinc-600 hover:bg-rose-100 border-2 border-transparent'
-                }`}
-              >
-                {option.label}
-              </motion.button>
-            ))}
+            {FREQUENCY_OPTIONS.map((option) => {
+              const isSelected = state.preferences.frequency === option.id
+              return (
+                <motion.button
+                  key={option.id}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={buttonSpring}
+                  onClick={() => updatePreferences({ frequency: option.id })}
+                  className={`py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
+                    isSelected
+                      ? 'bg-rose-400 text-white shadow-lg shadow-rose-900/20'
+                      : 'bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl'
+                  }`}
+                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                >
+                  {option.label}
+                </motion.button>
+              )
+            })}
           </div>
         </div>
       </div>
 
-      {/* Continue Button */}
+      {/* Continue Button - Arcade Style */}
       <motion.button
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{
+          scale: 1.05,
+          y: -2,
+          boxShadow: "0 6px 0 0 #be123c, 0 8px 20px rgba(225,29,72,0.5)",
+        }}
+        whileTap={{
+          scale: 0.98,
+          y: 2,
+          boxShadow: "0 1px 0 0 #be123c, 0 2px 4px rgba(225,29,72,0.2)",
+        }}
         transition={buttonSpring}
         onClick={handleContinue}
         disabled={!isValid || loading}
-        className="w-full bg-rose-400 text-white rounded-full py-4 font-quicksand font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-colors hover:bg-rose-300"
+        className={`w-full ${primaryCtaClasses}`}
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
-        {loading ? 'Saving...' : 'Continue'}
+        <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
+        <span className="relative z-10">
+          {loading ? 'Saving...' : 'Continue'}
+        </span>
       </motion.button>
 
       {/* Progress Dots */}
