@@ -77,7 +77,44 @@ Landing page for Mama — a consumer voice AI that makes phone calls for Gen Z u
 
 /* Optional Accent */
 --amber-300: #FCD34D; /* Highlights */
+
+/* Extended Palette - Retro-Futuristic Accents */
+/* Turquoise - Secondary accent, info states, classic Jetsons pairing with rose */
+--aqua-300: #5EEAD4;
+--aqua-400: #2DD4BF;
+--aqua-500: #14B8A6;
+
+/* Mint - Success states, "connected" indicators */
+--mint-200: #A7F3D0;
+--mint-300: #86EFAC;
+--mint-400: #4ADE80;
+
+/* Lavender - Premium features, processing states, Gen Z appeal */
+--lavender-200: #DDD6FE;
+--lavender-300: #C4B5FD;
+--lavender-400: #A78BFA;
+
+/* Peach - Warning/pending states, warm highlights */
+--peach-100: #FFE5D1;
+--peach-200: #FFD3B6;
+--peach-300: #FDBA74;
+
+/* Sunshine - Badges, celebrations, attention callouts */
+--sunshine-200: #FEF08A;
+--sunshine-300: #FDE68A;
 ```
+
+#### Color Application Guide
+
+| State/Use Case | Primary | Supporting |
+|----------------|---------|------------|
+| Default/Neutral | rose-400 | zinc-400 |
+| Success/Complete | mint-300 | mint-400 |
+| In Progress | peach-200 | amber-300 |
+| Information | aqua-300 | aqua-400 |
+| Warning | amber-300 | peach-300 |
+| Special/Premium | lavender-200 | lavender-300 |
+| Celebration | sunshine-200 | rose-300 |
 
 ### Typography
 

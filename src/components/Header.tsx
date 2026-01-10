@@ -16,7 +16,7 @@ export function Header({ className }: HeaderProps) {
         "border-b border-rose-200/30",
         className
       )}
-      style={{ backgroundColor: "#FEFAF6" }}
+      style={{ backgroundColor: "#FFFFFF" }}
     >
       <nav className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}

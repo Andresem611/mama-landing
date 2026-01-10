@@ -32,12 +32,9 @@ export function Hero({ className }: HeroProps) {
         className
       )}
     >
-      {/* Full-viewport warm cream background */}
+      {/* Full-viewport white background */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: "#FEFAF6",
-        }}
+        className="absolute inset-0 bg-white"
       />
 
       {/* Subtle texture overlay for depth */}

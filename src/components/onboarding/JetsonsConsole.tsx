@@ -2,8 +2,90 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
+
+// Retro terminal typing effect for empty states
+function TerminalTyping({
+  text,
+  typingSpeed = 80,
+  deletingSpeed = 40,
+  pauseBeforeDelete = 1500,
+  pauseBeforeType = 500,
+  loop = true,
+}: {
+  text: string
+  typingSpeed?: number
+  deletingSpeed?: number
+  pauseBeforeDelete?: number
+  pauseBeforeType?: number
+  loop?: boolean
+}) {
+  const [displayText, setDisplayText] = useState('')
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const typeCharacter = useCallback(() => {
+    if (isPaused) return
+
+    if (!isDeleting) {
+      // Typing forward
+      if (displayText.length < text.length) {
+        setDisplayText(text.slice(0, displayText.length + 1))
+      } else if (loop) {
+        // Finished typing, pause before deleting
+        setIsPaused(true)
+        setTimeout(() => {
+          setIsPaused(false)
+          setIsDeleting(true)
+        }, pauseBeforeDelete)
+      }
+    } else {
+      // Deleting
+      if (displayText.length > 0) {
+        setDisplayText(displayText.slice(0, -1))
+      } else {
+        // Finished deleting, pause before typing again
+        setIsPaused(true)
+        setTimeout(() => {
+          setIsPaused(false)
+          setIsDeleting(false)
+        }, pauseBeforeType)
+      }
+    }
+  }, [displayText, isDeleting, isPaused, loop, pauseBeforeDelete, pauseBeforeType, text])
+
+  useEffect(() => {
+    if (isPaused) return
+
+    const speed = isDeleting ? deletingSpeed : typingSpeed
+    const timer = setTimeout(typeCharacter, speed)
+    return () => clearTimeout(timer)
+  }, [typeCharacter, isDeleting, isPaused, typingSpeed, deletingSpeed])
+
+  return (
+    <span
+      className="font-mono text-emerald-500/70"
+      style={{
+        textShadow: '0 0 8px rgba(16, 185, 129, 0.3)',
+      }}
+    >
+      {displayText}
+      <motion.span
+        className="inline-block w-[0.6em] h-[1.1em] bg-emerald-500/70 ml-0.5 align-middle"
+        animate={{ opacity: [1, 1, 0, 0] }}
+        transition={{
+          duration: 1,
+          repeat: Infinity,
+          times: [0, 0.5, 0.5, 1],
+        }}
+        style={{
+          boxShadow: '0 0 6px rgba(16, 185, 129, 0.5)',
+        }}
+      />
+    </span>
+  )
+}
 
 // Use cases with OpenMoji icons (matching calls page)
 const USE_CASES = [
@@ -65,8 +147,8 @@ export function JetsonsConsole() {
                 boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(255,255,255,0.3)'
               }}
             >
-              {/* Screen Container - WHITE/LIGHT THEME */}
-              <div className="relative bg-rose-50 rounded-[18px] overflow-hidden">
+              {/* Screen Container - WHITE THEME */}
+              <div className="relative bg-white rounded-[18px] overflow-hidden">
                 {/* Subtle scan lines overlay */}
                 <div
                   className="absolute inset-0 pointer-events-none z-20 opacity-[0.02]"
@@ -177,15 +259,45 @@ export function JetsonsConsole() {
                     hasData={hasUplinkData}
                     index={3}
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <SignalIndicator active={hasUplinkData} />
+                      <span
+                        className="text-zinc-400 text-base"
+                        style={{ fontFamily: "'Quicksand', sans-serif" }}
+                      >
+                        PHONE:
+                      </span>
                       <div className="flex-1">
-                        <ConsoleField
-                          label="PHONE"
-                          value={preferences.phone}
-                          placeholder="(___) ___-____"
-                          large
-                        />
+                        <AnimatePresence mode="wait">
+                          {preferences.phone ? (
+                            <motion.span
+                              key={preferences.phone}
+                              initial={{ opacity: 0, y: -5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              exit={{ opacity: 0, y: 5 }}
+                              transition={{ type: 'spring', stiffness: 300 }}
+                              className="text-rose-500 font-semibold text-base tracking-wider"
+                              style={{ fontFamily: "'Quicksand', sans-serif" }}
+                            >
+                              {preferences.phone}
+                            </motion.span>
+                          ) : (
+                            <motion.span
+                              key="empty"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                            >
+                              <TerminalTyping
+                                text="CONNECTING..."
+                                typingSpeed={70}
+                                deletingSpeed={35}
+                                pauseBeforeDelete={2000}
+                                pauseBeforeType={800}
+                              />
+                            </motion.span>
+                          )}
+                        </AnimatePresence>
                       </div>
                     </div>
                   </ConsoleSection>
@@ -193,7 +305,7 @@ export function JetsonsConsole() {
 
                 {/* Footer with animated wave */}
                 <div
-                  className="px-6 py-3 relative z-30 bg-white/50"
+                  className="px-6 py-3 relative z-30 bg-zinc-50"
                   style={{
                     borderTop: '1px solid rgba(0,0,0,0.05)'
                   }}
@@ -283,8 +395,8 @@ function ConsoleSection({
       className="relative rounded-xl overflow-hidden"
       style={{
         background: hasData
-          ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,241,242,0.9) 100%)'
-          : 'linear-gradient(135deg, rgba(244,244,245,0.8) 0%, rgba(228,228,231,0.8) 100%)',
+          ? 'linear-gradient(135deg, #ffffff 0%, #fafafa 100%)'
+          : 'linear-gradient(135deg, #f4f4f5 0%, #e4e4e7 100%)',
         boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05)'
       }}
       variants={flickerVariants}
@@ -297,8 +409,8 @@ function ConsoleSection({
         className="px-3 py-1.5 flex items-center gap-2"
         style={{
           background: hasData
-            ? 'linear-gradient(180deg, rgba(251,113,133,0.15) 0%, rgba(251,113,133,0.05) 100%)'
-            : 'linear-gradient(180deg, rgba(161,161,170,0.15) 0%, rgba(161,161,170,0.05) 100%)',
+            ? 'linear-gradient(180deg, rgba(251,113,133,0.1) 0%, transparent 100%)'
+            : 'linear-gradient(180deg, rgba(0,0,0,0.03) 0%, transparent 100%)',
           borderBottom: '1px solid rgba(0,0,0,0.05)'
         }}
       >
@@ -327,18 +439,30 @@ function ConsoleSection({
   )
 }
 
-// Console field with empty state - LIGHT THEME
+// Terminal typing placeholder texts for different fields
+const TERMINAL_PLACEHOLDERS: Record<string, string> = {
+  NAME: 'AWAITING INPUT...',
+  AGE: 'SELECT AGE...',
+  CITY: 'ENTER LOCATION...',
+  PHONE: 'LINK UPLINK...',
+}
+
+// Console field with empty state - LIGHT THEME with terminal typing
 function ConsoleField({
   label,
   value,
-  placeholder = '---',
-  large = false
+  placeholder,
+  large = false,
+  showTypingEffect = true
 }: {
   label: string
   value?: string | null
   placeholder?: string
   large?: boolean
+  showTypingEffect?: boolean
 }) {
+  const terminalText = TERMINAL_PLACEHOLDERS[label] || 'AWAITING DATA...'
+
   return (
     <div
       className={`flex items-center gap-2 ${large ? 'text-base' : 'text-xs'}`}
@@ -346,19 +470,38 @@ function ConsoleField({
     >
       <span className="text-zinc-400 w-12">{label}:</span>
       <AnimatePresence mode="wait">
-        <motion.span
-          key={value ?? 'empty'}
-          initial={{ opacity: 0, y: -5 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 5 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-          className={value
-            ? `text-rose-500 font-semibold ${large ? 'tracking-wider' : ''}`
-            : 'text-zinc-300 font-mono'
-          }
-        >
-          {value || placeholder}
-        </motion.span>
+        {value ? (
+          <motion.span
+            key={value}
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+            className={`text-rose-500 font-semibold ${large ? 'tracking-wider' : ''}`}
+          >
+            {value}
+          </motion.span>
+        ) : (
+          <motion.span
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="inline-flex items-center"
+          >
+            {showTypingEffect ? (
+              <TerminalTyping
+                text={terminalText}
+                typingSpeed={70}
+                deletingSpeed={35}
+                pauseBeforeDelete={2000}
+                pauseBeforeType={800}
+              />
+            ) : (
+              <span className="text-zinc-300 font-mono">{placeholder || '---'}</span>
+            )}
+          </motion.span>
+        )}
       </AnimatePresence>
     </div>
   )
@@ -510,9 +653,16 @@ function polarToCartesian(cx: number, cy: number, radius: number, angleInDegrees
   }
 }
 
-// Mini indicator for flexibility and agency - LIGHT THEME
+// Terminal typing placeholder texts for mini indicators
+const MINI_INDICATOR_PLACEHOLDERS: Record<string, string> = {
+  FLEX: 'CALIBRATE...',
+  AGENCY: 'SET LEVEL...',
+}
+
+// Mini indicator for flexibility and agency - LIGHT THEME with terminal typing
 function MiniIndicator({ label, value }: { label: string; value: string }) {
   const hasValue = value !== '---'
+  const terminalText = MINI_INDICATOR_PLACEHOLDERS[label] || 'PENDING...'
 
   return (
     <div
@@ -528,15 +678,36 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
       >
         {label}:
       </span>
-      <motion.span
-        key={value}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        className={`text-[10px] font-bold uppercase ${hasValue ? 'text-rose-500' : 'text-zinc-300'}`}
-        style={{ fontFamily: "'Quicksand', sans-serif" }}
-      >
-        {value}
-      </motion.span>
+      <AnimatePresence mode="wait">
+        {hasValue ? (
+          <motion.span
+            key={value}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-[10px] font-bold uppercase text-rose-500"
+            style={{ fontFamily: "'Quicksand', sans-serif" }}
+          >
+            {value}
+          </motion.span>
+        ) : (
+          <motion.span
+            key="empty"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-[10px] inline-flex items-center"
+          >
+            <TerminalTyping
+              text={terminalText}
+              typingSpeed={60}
+              deletingSpeed={30}
+              pauseBeforeDelete={1800}
+              pauseBeforeType={600}
+            />
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
