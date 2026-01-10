@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
+import { CityCombobox } from '@/components/onboarding/CityCombobox'
 import { createClient } from '@/lib/supabase/client'
+import { getCityComment } from '@/lib/personality'
 
 const AGE_OPTIONS = ['18-24', '25-30', '31-40', '40+'] as const
 
@@ -35,8 +37,28 @@ const selectionPillClasses = {
 
 export default function AboutPage() {
   const router = useRouter()
-  const { state, updateProfile } = useOnboarding()
+  const { state, updateProfile, addMessage, clearMessages } = useOnboarding()
   const [loading, setLoading] = useState(false)
+  const [lastCommentedCity, setLastCommentedCity] = useState<string | null>(null)
+
+  // Clear messages when component mounts
+  useEffect(() => {
+    clearMessages()
+  }, [clearMessages])
+
+  // Handle city selection - immediately show comment
+  const handleCityChange = (city: string) => {
+    updateProfile({ location: city })
+
+    // Only comment if it's a new city selection
+    if (city && city !== lastCommentedCity) {
+      const cityComment = getCityComment(city)
+      if (cityComment) {
+        addMessage(cityComment)
+        setLastCommentedCity(city)
+      }
+    }
+  }
 
   const handleContinue = async () => {
     setLoading(true)
@@ -116,7 +138,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Location Input */}
+        {/* Location Dropdown */}
         <div className="space-y-3">
           <label
             className="font-semibold text-zinc-900"
@@ -124,13 +146,9 @@ export default function AboutPage() {
           >
             Where are you based?
           </label>
-          <input
-            type="text"
-            placeholder="City or zip code"
+          <CityCombobox
             value={state.profile.location ?? ''}
-            onChange={(e) => updateProfile({ location: e.target.value })}
-            className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-rose-100 focus:border-rose-400 transition-all"
-            style={{ fontFamily: "'Quicksand', sans-serif" }}
+            onValueChange={handleCityChange}
           />
         </div>
       </div>
