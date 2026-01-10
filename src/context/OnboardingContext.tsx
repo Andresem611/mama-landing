@@ -16,6 +16,7 @@ interface OnboardingContextType {
   // MAMA personality messages
   messages: MamaMessage[]
   addMessage: (text: string) => void
+  setMessage: (text: string) => void  // Replace all messages with one
   clearMessages: () => void
 }
 
@@ -63,6 +64,16 @@ export function OnboardingProvider({
     setMessages(prev => [...prev, newMessage])
   }, [])
 
+  // Replace all messages with a single new message
+  const setMessage = useCallback((text: string) => {
+    const newMessage: MamaMessage = {
+      id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      text,
+      timestamp: new Date(),
+    }
+    setMessages([newMessage])
+  }, [])
+
   const clearMessages = useCallback(() => {
     setMessages([])
   }, [])
@@ -74,6 +85,7 @@ export function OnboardingProvider({
       updatePreferences,
       messages,
       addMessage,
+      setMessage,
       clearMessages,
     }}>
       {children}

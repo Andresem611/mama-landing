@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
@@ -37,25 +37,17 @@ const selectionPillClasses = {
 
 export default function AboutPage() {
   const router = useRouter()
-  const { state, updateProfile, addMessage, clearMessages } = useOnboarding()
+  const { state, updateProfile, setMessage } = useOnboarding()
   const [loading, setLoading] = useState(false)
-  const [lastCommentedCity, setLastCommentedCity] = useState<string | null>(null)
 
-  // Clear messages when component mounts
-  useEffect(() => {
-    clearMessages()
-  }, [clearMessages])
-
-  // Handle city selection - immediately show comment
+  // Handle city selection - immediately show comment (replaces previous)
   const handleCityChange = (city: string) => {
     updateProfile({ location: city })
 
-    // Only comment if it's a new city selection
-    if (city && city !== lastCommentedCity) {
+    if (city) {
       const cityComment = getCityComment(city)
       if (cityComment) {
-        addMessage(cityComment)
-        setLastCommentedCity(city)
+        setMessage(cityComment)
       }
     }
   }

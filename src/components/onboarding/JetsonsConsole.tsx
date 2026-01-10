@@ -436,8 +436,8 @@ function ConsoleSection({
           }}
         />
         <h3
-          className={`font-bold text-[10px] tracking-wider ${hasData ? 'text-rose-500' : 'text-zinc-400'}`}
-          style={{ fontFamily: "'Quicksand', sans-serif" }}
+          className={`text-[10px] tracking-wider ${hasData ? 'text-rose-500' : 'text-zinc-400'}`}
+          style={{ fontFamily: "'Righteous', cursive" }}
         >
           {title}
         </h3>
@@ -477,10 +477,10 @@ function ConsoleField({
 
   return (
     <div
-      className={`flex items-center gap-2 ${large ? 'text-base' : 'text-xs'}`}
+      className={`flex items-center gap-2 h-5 min-w-0 ${large ? 'text-base' : 'text-xs'}`}
       style={{ fontFamily: "'Quicksand', sans-serif" }}
     >
-      <span className="text-zinc-400 w-12">{label}:</span>
+      <span className="text-zinc-400 w-12 flex-shrink-0">{label}:</span>
       <AnimatePresence mode="wait">
         {value ? (
           <motion.span
@@ -489,7 +489,7 @@ function ConsoleField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 5 }}
             transition={{ type: 'spring', stiffness: 300 }}
-            className={`text-rose-500 font-semibold ${large ? 'tracking-wider' : ''}`}
+            className={`text-rose-500 font-semibold truncate capitalize ${large ? 'tracking-wider' : ''}`}
           >
             {value}
           </motion.span>
@@ -678,14 +678,14 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
 
   return (
     <div
-      className="flex items-center gap-2 px-2 py-1 rounded"
+      className="flex items-center gap-1.5 px-2 py-1 rounded min-w-0 h-6"
       style={{
         background: 'rgba(0,0,0,0.03)',
         boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)'
       }}
     >
       <span
-        className="text-[9px] text-zinc-400 w-10"
+        className="text-[9px] text-zinc-400 flex-shrink-0"
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {label}:
@@ -697,8 +697,9 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-[10px] font-bold uppercase text-rose-500"
+            className="text-[10px] font-bold uppercase text-rose-500 truncate"
             style={{ fontFamily: "'Quicksand', sans-serif" }}
+            title={value}
           >
             {value}
           </motion.span>
