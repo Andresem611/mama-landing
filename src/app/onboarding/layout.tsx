@@ -26,7 +26,7 @@ export default async function OnboardingLayout({
           },
         }}
       >
-        <div className="min-h-screen grid lg:grid-cols-2 bg-cream">
+        <div className="min-h-screen grid lg:grid-cols-2 bg-white">
           <JetsonsConsole />
           <main className="flex items-center justify-center p-6 md:p-12 bg-white">
             <div className="w-full max-w-md">{children}</div>
@@ -68,7 +68,7 @@ export default async function OnboardingLayout({
         preferences: {},
       }}
     >
-      <div className="min-h-screen grid lg:grid-cols-2 bg-cream">
+      <div className="min-h-screen grid lg:grid-cols-2 bg-white">
         {/* Left: Jetsons Console - NO divider line */}
         <JetsonsConsole />
 

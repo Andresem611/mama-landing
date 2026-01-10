@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useOnboarding } from '@/context/OnboardingContext'
@@ -40,7 +41,7 @@ export default function DonePage() {
       transition={{ duration: 0.5 }}
       className="space-y-8 text-center"
     >
-      {/* Celebration Emoji */}
+      {/* Celebration Icon */}
       <motion.div
         initial={{ scale: 0, rotate: -180 }}
         animate={{ scale: 1, rotate: 0 }}
@@ -50,9 +51,14 @@ export default function DonePage() {
           damping: 15,
           delay: 0.2
         }}
-        className="text-7xl"
+        className="flex justify-center"
       >
-        🎉
+        <Image
+          src="/icons/openmoji/party-popper.svg"
+          alt="Celebration"
+          width={80}
+          height={80}
+        />
       </motion.div>
 
       {/* Header */}
@@ -88,7 +94,7 @@ export default function DonePage() {
           className="text-zinc-700"
           style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
-          We&apos;ll text you at
+          <span style={{ fontFamily: "'Righteous', cursive" }}>MAMA</span> will text you at
         </p>
         <p
           className="text-2xl font-bold text-rose-500"
