@@ -8,12 +8,12 @@ const buttonVariants = {
   hover: {
     scale: 1.02,
     y: -2,
-    transition: { type: 'spring', stiffness: 400, damping: 17 }
+    transition: { type: 'spring' as const, stiffness: 400, damping: 17 }
   },
   tap: {
     scale: 0.98,
     y: 0,
-    transition: { type: 'spring', stiffness: 400, damping: 17 }
+    transition: { type: 'spring' as const, stiffness: 400, damping: 17 }
   }
 }
 
