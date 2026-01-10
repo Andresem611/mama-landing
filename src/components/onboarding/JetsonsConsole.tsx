@@ -2,14 +2,26 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
-import { USE_CASE_OPTIONS } from '@/types/onboarding'
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
+
+// Use cases with OpenMoji icons (matching calls page)
+const USE_CASES = [
+  { id: 'dentist', label: 'Dentist', icon: '/icons/openmoji/tooth.svg' },
+  { id: 'restaurant', label: 'Restaurants', icon: '/icons/openmoji/fork-knife-plate.svg' },
+  { id: 'doctor', label: 'Doctor', icon: '/icons/openmoji/hospital.svg' },
+  { id: 'customer_service', label: 'Support', icon: '/icons/openmoji/telephone.svg' },
+  { id: 'landlord', label: 'Landlord', icon: '/icons/openmoji/house.svg' },
+  { id: 'utilities', label: 'Utilities', icon: '/icons/openmoji/lightning.svg' },
+  { id: 'government', label: 'Gov/DMV', icon: '/icons/openmoji/bank.svg' },
+  { id: 'other', label: 'Other', icon: '/icons/openmoji/clipboard.svg' },
+]
 
 // Flicker animation for when data arrives
 const flickerVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0.3 },
   flicker: {
-    opacity: [0, 1, 0.3, 1, 0.7, 1],
+    opacity: [0.3, 1, 0.5, 1, 0.7, 1],
     transition: { duration: 0.4, times: [0, 0.1, 0.2, 0.3, 0.5, 1] }
   },
   visible: { opacity: 1 }
@@ -41,35 +53,34 @@ export function JetsonsConsole() {
           <div
             className="rounded-3xl p-1"
             style={{
-              background: 'linear-gradient(145deg, #a8a8a8 0%, #4a4a4a 50%, #2a2a2a 100%)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2)'
+              background: 'linear-gradient(145deg, #e8e8e8 0%, #a8a8a8 50%, #888888 100%)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5)'
             }}
           >
             {/* Inner bevel */}
             <div
               className="rounded-[22px] p-1"
               style={{
-                background: 'linear-gradient(145deg, #3a3a3a 0%, #5a5a5a 50%, #3a3a3a 100%)',
-                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.5), inset 0 -1px 2px rgba(255,255,255,0.1)'
+                background: 'linear-gradient(145deg, #d0d0d0 0%, #b8b8b8 50%, #a0a0a0 100%)',
+                boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(255,255,255,0.3)'
               }}
             >
-              {/* CRT Screen Container */}
-              <div className="relative bg-zinc-900 rounded-[18px] overflow-hidden">
-                {/* CRT Scan Lines Overlay */}
+              {/* Screen Container - WHITE/LIGHT THEME */}
+              <div className="relative bg-rose-50 rounded-[18px] overflow-hidden">
+                {/* Subtle scan lines overlay */}
                 <div
-                  className="absolute inset-0 pointer-events-none z-20 opacity-[0.03]"
+                  className="absolute inset-0 pointer-events-none z-20 opacity-[0.02]"
                   style={{
-                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.3) 1px, rgba(0,0,0,0.3) 2px)',
+                    backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 2px)',
                     backgroundSize: '100% 2px'
                   }}
                 />
 
-                {/* CRT Vignette/Glow Effect */}
+                {/* Subtle vignette */}
                 <div
                   className="absolute inset-0 pointer-events-none z-10"
                   style={{
-                    background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)',
-                    boxShadow: 'inset 0 0 60px rgba(251,113,133,0.15), inset 0 0 120px rgba(0,0,0,0.3)'
+                    background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.05) 100%)',
                   }}
                 />
 
@@ -77,8 +88,8 @@ export function JetsonsConsole() {
                 <div
                   className="px-6 py-4 flex items-center justify-between relative z-30"
                   style={{
-                    background: 'linear-gradient(180deg, rgba(251,113,133,0.9) 0%, rgba(225,29,72,0.9) 100%)',
-                    borderBottom: '2px solid rgba(0,0,0,0.3)'
+                    background: 'linear-gradient(180deg, #fb7185 0%, #e11d48 100%)',
+                    borderBottom: '2px solid rgba(0,0,0,0.1)'
                   }}
                 >
                   {/* Status Lights - 4 for each step */}
@@ -89,7 +100,7 @@ export function JetsonsConsole() {
                   </div>
 
                   <span
-                    className="text-white text-xs tracking-[0.2em] drop-shadow-lg"
+                    className="text-white text-xs tracking-[0.2em] drop-shadow-md"
                     style={{ fontFamily: "'Righteous', cursive" }}
                   >
                     MAMA CONFIGURATION
@@ -102,7 +113,7 @@ export function JetsonsConsole() {
                   </div>
                 </div>
 
-                {/* Console Body */}
+                {/* Console Body - LIGHT THEME */}
                 <div className="p-5 space-y-4 relative z-30">
                   {/* Operator Section */}
                   <ConsoleSection
@@ -122,24 +133,24 @@ export function JetsonsConsole() {
                     index={1}
                   >
                     <div className="grid grid-cols-4 gap-2">
-                      {USE_CASE_OPTIONS.slice(0, 8).map((option) => (
+                      {USE_CASES.map((option) => (
                         <ConsoleCheckbox
                           key={option.id}
-                          label={option.icon}
+                          icon={option.icon}
                           checked={preferences.use_cases?.includes(option.id) ?? false}
                         />
                       ))}
                     </div>
                   </ConsoleSection>
 
-                  {/* Personality Section with 3D Gauge */}
+                  {/* Personality Section with Gauge */}
                   <ConsoleSection
                     title="PERSONALITY"
                     hasData={hasPersonalityData}
                     index={2}
                   >
                     <div className="flex items-center gap-4">
-                      {/* 3D Needle Gauge */}
+                      {/* Needle Gauge */}
                       <NeedleGauge
                         value={preferences.persistence ?? 0}
                         max={5}
@@ -182,10 +193,9 @@ export function JetsonsConsole() {
 
                 {/* Footer with animated wave */}
                 <div
-                  className="px-6 py-3 relative z-30"
+                  className="px-6 py-3 relative z-30 bg-white/50"
                   style={{
-                    background: 'linear-gradient(180deg, rgba(39,39,42,1) 0%, rgba(24,24,27,1) 100%)',
-                    borderTop: '1px solid rgba(255,255,255,0.05)'
+                    borderTop: '1px solid rgba(0,0,0,0.05)'
                   }}
                 >
                   <WaveformDisplay active={hasUplinkData} />
@@ -221,10 +231,10 @@ function StatusLight({ active, index }: { active: boolean; index: number }) {
         style={{
           background: active
             ? 'radial-gradient(circle at 30% 30%, #86efac, #22c55e 50%, #15803d)'
-            : 'radial-gradient(circle at 30% 30%, #71717a, #52525b 50%, #27272a)',
+            : 'radial-gradient(circle at 30% 30%, #d4d4d8, #a1a1aa 50%, #71717a)',
           boxShadow: active
             ? '0 0 8px rgba(34,197,94,0.8), inset 0 1px 2px rgba(255,255,255,0.3)'
-            : 'inset 0 1px 2px rgba(0,0,0,0.5), inset 0 -1px 1px rgba(255,255,255,0.1)'
+            : 'inset 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(255,255,255,0.3)'
         }}
       />
     </motion.div>
@@ -237,14 +247,14 @@ function Screw() {
     <div
       className="w-3 h-3 rounded-full"
       style={{
-        background: 'conic-gradient(from 45deg, #666, #999, #666, #333, #666)',
-        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.5), 0 1px 1px rgba(255,255,255,0.1)'
+        background: 'conic-gradient(from 45deg, #999, #ccc, #999, #666, #999)',
+        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(255,255,255,0.5)'
       }}
     />
   )
 }
 
-// Console section with flicker effect
+// Console section with flicker effect - LIGHT THEME
 function ConsoleSection({
   title,
   children,
@@ -272,8 +282,10 @@ function ConsoleSection({
     <motion.div
       className="relative rounded-xl overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, rgba(39,39,42,0.8) 0%, rgba(24,24,27,0.9) 100%)',
-        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2)'
+        background: hasData
+          ? 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,241,242,0.9) 100%)'
+          : 'linear-gradient(135deg, rgba(244,244,245,0.8) 0%, rgba(228,228,231,0.8) 100%)',
+        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.05), 0 2px 4px rgba(0,0,0,0.05)'
       }}
       variants={flickerVariants}
       initial="visible"
@@ -284,8 +296,10 @@ function ConsoleSection({
       <div
         className="px-3 py-1.5 flex items-center gap-2"
         style={{
-          background: 'linear-gradient(180deg, rgba(63,63,70,0.8) 0%, rgba(39,39,42,0.8) 100%)',
-          borderBottom: '1px solid rgba(0,0,0,0.3)'
+          background: hasData
+            ? 'linear-gradient(180deg, rgba(251,113,133,0.15) 0%, rgba(251,113,133,0.05) 100%)'
+            : 'linear-gradient(180deg, rgba(161,161,170,0.15) 0%, rgba(161,161,170,0.05) 100%)',
+          borderBottom: '1px solid rgba(0,0,0,0.05)'
         }}
       >
         <div
@@ -293,12 +307,12 @@ function ConsoleSection({
           style={{
             background: hasData
               ? 'radial-gradient(circle at 30% 30%, #fda4af, #fb7185)'
-              : '#52525b',
+              : '#a1a1aa',
             boxShadow: hasData ? '0 0 4px rgba(251,113,133,0.5)' : 'none'
           }}
         />
         <h3
-          className={`font-bold text-[10px] tracking-wider ${hasData ? 'text-rose-300' : 'text-zinc-500'}`}
+          className={`font-bold text-[10px] tracking-wider ${hasData ? 'text-rose-500' : 'text-zinc-400'}`}
           style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
           {title}
@@ -306,14 +320,14 @@ function ConsoleSection({
       </div>
 
       {/* Section content */}
-      <div className={`p-3 ${!hasData ? 'opacity-50' : ''}`}>
+      <div className={`p-3 ${!hasData ? 'opacity-40' : ''}`}>
         {children}
       </div>
     </motion.div>
   )
 }
 
-// Console field with empty state
+// Console field with empty state - LIGHT THEME
 function ConsoleField({
   label,
   value,
@@ -330,7 +344,7 @@ function ConsoleField({
       className={`flex items-center gap-2 ${large ? 'text-base' : 'text-xs'}`}
       style={{ fontFamily: "'Quicksand', sans-serif" }}
     >
-      <span className="text-zinc-500 w-12">{label}:</span>
+      <span className="text-zinc-400 w-12">{label}:</span>
       <AnimatePresence mode="wait">
         <motion.span
           key={value ?? 'empty'}
@@ -339,8 +353,8 @@ function ConsoleField({
           exit={{ opacity: 0, y: 5 }}
           transition={{ type: 'spring', stiffness: 300 }}
           className={value
-            ? `text-rose-400 font-semibold ${large ? 'tracking-wider' : ''}`
-            : 'text-zinc-600 font-mono'
+            ? `text-rose-500 font-semibold ${large ? 'tracking-wider' : ''}`
+            : 'text-zinc-300 font-mono'
           }
         >
           {value || placeholder}
@@ -350,26 +364,32 @@ function ConsoleField({
   )
 }
 
-// Checkbox indicator for call types
-function ConsoleCheckbox({ label, checked }: { label: string; checked: boolean }) {
+// Checkbox indicator for call types - using OpenMoji SVGs
+function ConsoleCheckbox({ icon, checked }: { icon: string; checked: boolean }) {
   return (
     <motion.div
       animate={{
         scale: checked ? 1.1 : 0.85,
-        opacity: checked ? 1 : 0.3,
+        opacity: checked ? 1 : 0.25,
       }}
       transition={{ type: 'spring', stiffness: 400, damping: 17 }}
-      className="text-center text-lg"
+      className="flex items-center justify-center"
       style={{
-        filter: checked ? 'drop-shadow(0 0 4px rgba(251,113,133,0.5))' : 'grayscale(1)'
+        filter: checked ? 'none' : 'grayscale(1)'
       }}
     >
-      {label}
+      <Image
+        src={icon}
+        alt=""
+        width={24}
+        height={24}
+        className={checked ? '' : 'opacity-50'}
+      />
     </motion.div>
   )
 }
 
-// 3D Needle Gauge Component
+// Needle Gauge Component - LIGHT THEME
 function NeedleGauge({ value, max, label }: { value: number; max: number; label: string }) {
   // Convert value to rotation angle (-135 to 135 degrees)
   const rotation = -135 + ((value / max) * 270)
@@ -380,16 +400,16 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
       <div
         className="relative w-20 h-20 rounded-full"
         style={{
-          background: 'conic-gradient(from 180deg, #27272a 0%, #3f3f46 25%, #52525b 50%, #3f3f46 75%, #27272a 100%)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1), inset 0 -2px 4px rgba(0,0,0,0.3)'
+          background: 'linear-gradient(145deg, #ffffff 0%, #e4e4e7 100%)',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1), inset 0 2px 4px rgba(255,255,255,1), inset 0 -2px 4px rgba(0,0,0,0.05)'
         }}
       >
         {/* Inner ring */}
         <div
           className="absolute inset-1 rounded-full"
           style={{
-            background: 'radial-gradient(circle at 30% 30%, #52525b, #27272a 70%)',
-            boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.5)'
+            background: 'radial-gradient(circle at 30% 30%, #fafafa, #e4e4e7 70%)',
+            boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.1)'
           }}
         >
           {/* Gauge markings */}
@@ -406,7 +426,7 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
                 <line
                   key={i}
                   x1={x1} y1={y1} x2={x2} y2={y2}
-                  stroke={i <= value ? '#fb7185' : '#52525b'}
+                  stroke={i <= value ? '#fb7185' : '#d4d4d8'}
                   strokeWidth="2"
                   strokeLinecap="round"
                 />
@@ -417,13 +437,13 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
             <path
               d={describeArc(50, 50, 35, -135, rotation)}
               fill="none"
-              stroke="url(#gaugeGradient)"
+              stroke="url(#gaugeGradientLight)"
               strokeWidth="4"
               strokeLinecap="round"
             />
 
             <defs>
-              <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient id="gaugeGradientLight" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#fda4af" />
                 <stop offset="100%" stopColor="#fb7185" />
               </linearGradient>
@@ -447,7 +467,7 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
               style={{
                 background: 'linear-gradient(180deg, #fb7185 0%, #e11d48 100%)',
                 clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
               }}
             />
           </motion.div>
@@ -456,8 +476,8 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
           <div
             className="absolute left-1/2 top-1/2 w-4 h-4 -ml-2 -mt-2 rounded-full"
             style={{
-              background: 'radial-gradient(circle at 30% 30%, #71717a, #27272a)',
-              boxShadow: '0 2px 4px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.2)'
+              background: 'radial-gradient(circle at 30% 30%, #f4f4f5, #a1a1aa)',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.8)'
             }}
           />
         </div>
@@ -465,7 +485,7 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
 
       {/* Label */}
       <span
-        className="text-[9px] text-zinc-500 tracking-wider"
+        className="text-[9px] text-zinc-400 tracking-wider"
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {label}
@@ -490,7 +510,7 @@ function polarToCartesian(cx: number, cy: number, radius: number, angleInDegrees
   }
 }
 
-// Mini indicator for flexibility and agency
+// Mini indicator for flexibility and agency - LIGHT THEME
 function MiniIndicator({ label, value }: { label: string; value: string }) {
   const hasValue = value !== '---'
 
@@ -498,12 +518,12 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
     <div
       className="flex items-center gap-2 px-2 py-1 rounded"
       style={{
-        background: 'rgba(0,0,0,0.2)',
-        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.3)'
+        background: 'rgba(0,0,0,0.03)',
+        boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)'
       }}
     >
       <span
-        className="text-[9px] text-zinc-500 w-10"
+        className="text-[9px] text-zinc-400 w-10"
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {label}:
@@ -512,7 +532,7 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
         key={value}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className={`text-[10px] font-bold uppercase ${hasValue ? 'text-rose-400' : 'text-zinc-600'}`}
+        className={`text-[10px] font-bold uppercase ${hasValue ? 'text-rose-500' : 'text-zinc-300'}`}
         style={{ fontFamily: "'Quicksand', sans-serif" }}
       >
         {value}
@@ -533,7 +553,7 @@ function SignalIndicator({ active }: { active: boolean }) {
             height: `${bar * 4}px`,
             background: active && bar <= 4
               ? 'linear-gradient(180deg, #86efac, #22c55e)'
-              : '#3f3f46',
+              : '#d4d4d8',
             boxShadow: active && bar <= 4 ? '0 0 4px rgba(34,197,94,0.5)' : 'none'
           }}
           animate={active ? {
@@ -550,7 +570,7 @@ function SignalIndicator({ active }: { active: boolean }) {
   )
 }
 
-// Waveform display at bottom
+// Waveform display at bottom - LIGHT THEME
 function WaveformDisplay({ active }: { active: boolean }) {
   return (
     <div className="flex items-center justify-center gap-1 h-6">
@@ -561,7 +581,7 @@ function WaveformDisplay({ active }: { active: boolean }) {
           style={{
             background: active
               ? 'linear-gradient(180deg, #fda4af, #fb7185)'
-              : '#3f3f46'
+              : '#d4d4d8'
           }}
           animate={active ? {
             height: [4, Math.random() * 16 + 4, 4],
