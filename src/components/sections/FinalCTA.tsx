@@ -101,7 +101,7 @@ export function FinalCTA({ className }: FinalCTAProps) {
               {/* Subtle inner glow/highlight for retro effect */}
               <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
               <span className="relative z-10">
-                Sign Up Free
+                Sign Up & Join Waitlist
               </span>
             </motion.span>
           </Link>

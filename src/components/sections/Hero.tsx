@@ -167,7 +167,7 @@ export function Hero({ className }: HeroProps) {
                   {/* Subtle inner glow/highlight for retro effect */}
                   <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
                   <span className="relative z-10">
-                    Get Started
+                    Sign Up & Join Waitlist
                   </span>
                 </motion.span>
               </Link>
