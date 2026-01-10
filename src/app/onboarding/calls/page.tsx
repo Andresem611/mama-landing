@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
@@ -8,6 +8,7 @@ import { useOnboarding } from '@/context/OnboardingContext'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
 import { FREQUENCY_OPTIONS } from '@/types/onboarding'
 import { createClient } from '@/lib/supabase/client'
+import { getUseCaseComment, getUseCaseCountComment } from '@/lib/personality'
 
 // Use cases with OpenMoji icons
 const USE_CASES = [
@@ -47,15 +48,42 @@ const selectionPillClasses = {
 
 export default function CallsPage() {
   const router = useRouter()
-  const { state, updatePreferences } = useOnboarding()
+  const { state, updatePreferences, addMessage, clearMessages } = useOnboarding()
   const [loading, setLoading] = useState(false)
+  const lastCommentedCount = useRef(0)
+
+  // Clear messages when component mounts
+  useEffect(() => {
+    clearMessages()
+  }, [clearMessages])
 
   const toggleUseCase = (id: string) => {
     const current = state.preferences.use_cases ?? []
-    const updated = current.includes(id)
-      ? current.filter((c) => c !== id)
-      : [...current, id]
+    const isAdding = !current.includes(id)
+    const updated = isAdding
+      ? [...current, id]
+      : current.filter((c) => c !== id)
     updatePreferences({ use_cases: updated })
+
+    // Show personality comment when adding
+    if (isAdding) {
+      // First check for individual use case comment (50% chance)
+      const useCaseComment = getUseCaseComment(id)
+      if (useCaseComment && Math.random() > 0.5) {
+        setTimeout(() => addMessage(useCaseComment), 300)
+        return
+      }
+
+      // Then check for count-based comment (only if count increased to a threshold)
+      const newCount = updated.length
+      if (newCount > lastCommentedCount.current) {
+        const countComment = getUseCaseCountComment(newCount)
+        if (countComment) {
+          setTimeout(() => addMessage(countComment), 300)
+          lastCommentedCount.current = newCount
+        }
+      }
+    }
   }
 
   const handleContinue = async () => {

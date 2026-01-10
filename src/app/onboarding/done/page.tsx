@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useOnboarding } from '@/context/OnboardingContext'
+import { getRandomDoneComment } from '@/lib/personality'
 
 const buttonSpring = {
   type: 'spring' as const,
@@ -109,6 +110,17 @@ export default function DonePage() {
           when you&apos;re off the waitlist
         </p>
       </motion.div>
+
+      {/* Personality Comment */}
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.55 }}
+        className="text-center text-zinc-400 text-sm italic"
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
+      >
+        {getRandomDoneComment()}
+      </motion.p>
 
       {/* Share Section */}
       <motion.div

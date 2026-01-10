@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
 import { FLEXIBILITY_OPTIONS, AGENCY_OPTIONS } from '@/types/onboarding'
 import { createClient } from '@/lib/supabase/client'
+import { getPersistenceComment, getFlexibilityComment, getAgencyComment } from '@/lib/personality'
 
 const buttonSpring = {
   type: 'spring' as const,
@@ -34,8 +35,54 @@ const listButtonClasses = {
 
 export default function StylePage() {
   const router = useRouter()
-  const { state, updatePreferences } = useOnboarding()
+  const { state, updatePreferences, addMessage, clearMessages } = useOnboarding()
   const [loading, setLoading] = useState(false)
+  const sliderTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const lastPersistence = useRef(state.preferences.persistence ?? 3)
+
+  // Clear messages when component mounts
+  useEffect(() => {
+    clearMessages()
+  }, [clearMessages])
+
+  // Handle persistence slider changes with debounce
+  const handlePersistenceChange = (value: number) => {
+    updatePreferences({ persistence: value })
+
+    // Clear any pending timeout
+    if (sliderTimeoutRef.current) {
+      clearTimeout(sliderTimeoutRef.current)
+    }
+
+    // Only show comment if value changed significantly
+    if (value !== lastPersistence.current) {
+      sliderTimeoutRef.current = setTimeout(() => {
+        const persistenceComment = getPersistenceComment(value)
+        if (persistenceComment) {
+          addMessage(persistenceComment)
+        }
+        lastPersistence.current = value
+      }, 800)
+    }
+  }
+
+  // Handle flexibility selection
+  const handleFlexibilityChange = (flexibilityId: 'strict' | 'somewhat' | 'flexible') => {
+    updatePreferences({ flexibility: flexibilityId })
+    const flexComment = getFlexibilityComment(flexibilityId)
+    if (flexComment) {
+      setTimeout(() => addMessage(flexComment), 300)
+    }
+  }
+
+  // Handle agency selection
+  const handleAgencyChange = (agencyId: number) => {
+    updatePreferences({ agency: agencyId })
+    const agencyComment = getAgencyComment(agencyId)
+    if (agencyComment) {
+      setTimeout(() => addMessage(agencyComment), 300)
+    }
+  }
 
   const handleContinue = async () => {
     setLoading(true)
@@ -101,7 +148,7 @@ export default function StylePage() {
                 min="1"
                 max="5"
                 value={state.preferences.persistence ?? 3}
-                onChange={(e) => updatePreferences({ persistence: parseInt(e.target.value) })}
+                onChange={(e) => handlePersistenceChange(parseInt(e.target.value))}
                 className="w-full h-2 bg-rose-100 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-rose-400 [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-md [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-rose-400 [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-0"
               />
             </div>
@@ -133,7 +180,7 @@ export default function StylePage() {
                   whileHover={{ scale: 1.01, y: -1 }}
                   whileTap={{ scale: 0.99 }}
                   transition={buttonSpring}
-                  onClick={() => updatePreferences({ flexibility: option.id })}
+                  onClick={() => handleFlexibilityChange(option.id)}
                   className={`${listButtonClasses.base} ${
                     isSelected ? listButtonClasses.selected : listButtonClasses.unselected
                   }`}
@@ -168,7 +215,7 @@ export default function StylePage() {
                   whileHover={{ scale: 1.01, y: -1 }}
                   whileTap={{ scale: 0.99 }}
                   transition={buttonSpring}
-                  onClick={() => updatePreferences({ agency: option.id })}
+                  onClick={() => handleAgencyChange(option.id)}
                   className={`${listButtonClasses.base} ${
                     isSelected ? listButtonClasses.selected : listButtonClasses.unselected
                   }`}

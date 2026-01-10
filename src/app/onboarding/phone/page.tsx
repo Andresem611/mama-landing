@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
 import { ProgressDots } from '@/components/onboarding/ProgressDots'
 import { createClient } from '@/lib/supabase/client'
+import { getPhoneComment } from '@/lib/personality'
 
 const buttonSpring = {
   type: 'spring' as const,
@@ -26,8 +27,27 @@ const primaryCtaClasses = `
 
 export default function PhonePage() {
   const router = useRouter()
-  const { state, updatePreferences } = useOnboarding()
+  const { state, updatePreferences, addMessage, clearMessages } = useOnboarding()
   const [loading, setLoading] = useState(false)
+  const hasShownComment = useRef(false)
+
+  // Clear messages when component mounts
+  useEffect(() => {
+    clearMessages()
+  }, [clearMessages])
+
+  // Show comment when phone number is complete
+  useEffect(() => {
+    const phone = state.preferences.phone ?? ''
+    const phoneDigits = phone.replace(/\D/g, '')
+    if (phoneDigits.length === 10 && !hasShownComment.current) {
+      const comment = getPhoneComment(phone, true)
+      if (comment) {
+        setTimeout(() => addMessage(comment), 500)
+        hasShownComment.current = true
+      }
+    }
+  }, [state.preferences.phone, addMessage])
 
   const formatPhoneNumber = (value: string) => {
     // Remove all non-digits

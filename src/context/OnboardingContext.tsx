@@ -1,12 +1,22 @@
 'use client'
 
-import { createContext, useContext, useState, ReactNode } from 'react'
+import { createContext, useContext, useState, ReactNode, useCallback } from 'react'
 import { OnboardingState } from '@/types/onboarding'
+
+export interface MamaMessage {
+  id: string
+  text: string
+  timestamp: Date
+}
 
 interface OnboardingContextType {
   state: OnboardingState
   updateProfile: (data: Partial<OnboardingState['profile']>) => void
   updatePreferences: (data: Partial<OnboardingState['preferences']>) => void
+  // MAMA personality messages
+  messages: MamaMessage[]
+  addMessage: (text: string) => void
+  clearMessages: () => void
 }
 
 const OnboardingContext = createContext<OnboardingContextType | undefined>(undefined)
@@ -28,6 +38,8 @@ export function OnboardingProvider({
     },
   })
 
+  const [messages, setMessages] = useState<MamaMessage[]>([])
+
   const updateProfile = (data: Partial<OnboardingState['profile']>) => {
     setState(prev => ({
       ...prev,
@@ -42,8 +54,28 @@ export function OnboardingProvider({
     }))
   }
 
+  const addMessage = useCallback((text: string) => {
+    const newMessage: MamaMessage = {
+      id: `msg-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      text,
+      timestamp: new Date(),
+    }
+    setMessages(prev => [...prev, newMessage])
+  }, [])
+
+  const clearMessages = useCallback(() => {
+    setMessages([])
+  }, [])
+
   return (
-    <OnboardingContext.Provider value={{ state, updateProfile, updatePreferences }}>
+    <OnboardingContext.Provider value={{
+      state,
+      updateProfile,
+      updatePreferences,
+      messages,
+      addMessage,
+      clearMessages,
+    }}>
       {children}
     </OnboardingContext.Provider>
   )
