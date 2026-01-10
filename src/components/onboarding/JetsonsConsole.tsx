@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import Image from 'next/image'
 
 // Retro terminal typing effect for empty states
@@ -110,8 +110,14 @@ const flickerVariants = {
 }
 
 export function JetsonsConsole() {
-  const { state } = useOnboarding()
+  const { state, messages } = useOnboarding()
   const { profile, preferences } = state
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll messages when new ones arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   // Track which sections have data for status lights
   const hasOperatorData = !!(profile.name || profile.age_range || profile.location)
@@ -122,13 +128,13 @@ export function JetsonsConsole() {
   const completedSteps = [hasOperatorData, hasCallData, hasPersonalityData, hasUplinkData]
 
   return (
-    <div className="hidden lg:flex items-center justify-center bg-white p-8">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.5 }}
+      className="hidden lg:flex items-center justify-center bg-white p-8"
+    >
+      <div className="w-full max-w-2xl">
         {/* Console Frame - Metallic 3D Look */}
         <div className="relative">
           {/* Outer metallic frame */}
@@ -147,7 +153,7 @@ export function JetsonsConsole() {
                 boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.2), inset 0 -1px 2px rgba(255,255,255,0.3)'
               }}
             >
-              {/* Screen Container - WHITE THEME */}
+              {/* Screen Container */}
               <div className="relative bg-white rounded-[18px] overflow-hidden">
                 {/* Subtle scan lines overlay */}
                 <div
@@ -155,14 +161,6 @@ export function JetsonsConsole() {
                   style={{
                     backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(0,0,0,0.1) 1px, rgba(0,0,0,0.1) 2px)',
                     backgroundSize: '100% 2px'
-                  }}
-                />
-
-                {/* Subtle vignette */}
-                <div
-                  className="absolute inset-0 pointer-events-none z-10"
-                  style={{
-                    background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.05) 100%)',
                   }}
                 />
 
@@ -174,7 +172,7 @@ export function JetsonsConsole() {
                     borderBottom: '2px solid rgba(0,0,0,0.1)'
                   }}
                 >
-                  {/* Status Lights - 4 for each step */}
+                  {/* Status Lights */}
                   <div className="flex gap-2">
                     {completedSteps.map((completed, i) => (
                       <StatusLight key={i} active={completed} index={i} />
@@ -195,120 +193,134 @@ export function JetsonsConsole() {
                   </div>
                 </div>
 
-                {/* Console Body - LIGHT THEME */}
-                <div className="p-5 space-y-4 relative z-30">
-                  {/* Operator Section */}
-                  <ConsoleSection
-                    title="OPERATOR"
-                    hasData={hasOperatorData}
-                    index={0}
-                  >
-                    <ConsoleField label="NAME" value={profile.name} />
-                    <ConsoleField label="AGE" value={profile.age_range} />
-                    <ConsoleField label="CITY" value={profile.location} />
-                  </ConsoleSection>
+                {/* SPLIT BODY - Two columns */}
+                <div className="grid grid-cols-2 relative z-30">
+                  {/* LEFT: Configuration Data */}
+                  <div className="p-4 space-y-3 border-r border-zinc-100">
+                    {/* Operator Section */}
+                    <ConsoleSection title="OPERATOR" hasData={hasOperatorData} index={0}>
+                      <ConsoleField label="NAME" value={profile.name} />
+                      <ConsoleField label="AGE" value={profile.age_range} />
+                      <ConsoleField label="CITY" value={profile.location} />
+                    </ConsoleSection>
 
-                  {/* Call Types Section */}
-                  <ConsoleSection
-                    title="CALL TYPES"
-                    hasData={hasCallData}
-                    index={1}
-                  >
-                    <div className="grid grid-cols-4 gap-2">
-                      {USE_CASES.map((option) => (
-                        <ConsoleCheckbox
-                          key={option.id}
-                          icon={option.icon}
-                          checked={preferences.use_cases?.includes(option.id) ?? false}
-                        />
-                      ))}
-                    </div>
-                  </ConsoleSection>
-
-                  {/* Personality Section with Gauge */}
-                  <ConsoleSection
-                    title="PERSONALITY"
-                    hasData={hasPersonalityData}
-                    index={2}
-                  >
-                    <div className="flex items-center gap-4">
-                      {/* Needle Gauge */}
-                      <NeedleGauge
-                        value={preferences.persistence ?? 0}
-                        max={5}
-                        label="PERSISTENCE"
-                      />
-
-                      {/* Vertical indicators */}
-                      <div className="flex-1 space-y-2">
-                        <MiniIndicator
-                          label="FLEX"
-                          value={preferences.flexibility ?? '---'}
-                        />
-                        <MiniIndicator
-                          label="AGENCY"
-                          value={preferences.agency ? `LVL ${preferences.agency}` : '---'}
-                        />
+                    {/* Call Types Section */}
+                    <ConsoleSection title="CALL TYPES" hasData={hasCallData} index={1}>
+                      <div className="grid grid-cols-4 gap-1.5">
+                        {USE_CASES.map((option) => (
+                          <ConsoleCheckbox
+                            key={option.id}
+                            icon={option.icon}
+                            checked={preferences.use_cases?.includes(option.id) ?? false}
+                          />
+                        ))}
                       </div>
-                    </div>
-                  </ConsoleSection>
+                    </ConsoleSection>
 
-                  {/* Uplink Section */}
-                  <ConsoleSection
-                    title="UPLINK"
-                    hasData={hasUplinkData}
-                    index={3}
-                  >
-                    <div className="flex items-center gap-4">
-                      <SignalIndicator active={hasUplinkData} />
-                      <span
-                        className="text-zinc-400 text-base"
-                        style={{ fontFamily: "'Quicksand', sans-serif" }}
-                      >
-                        PHONE:
-                      </span>
-                      <div className="flex-1">
+                    {/* Personality Section */}
+                    <ConsoleSection title="PERSONALITY" hasData={hasPersonalityData} index={2}>
+                      <div className="flex items-center gap-3">
+                        <NeedleGauge
+                          value={preferences.persistence ?? 0}
+                          max={5}
+                          label="PERSIST"
+                        />
+                        <div className="flex-1 space-y-1.5">
+                          <MiniIndicator label="FLEX" value={preferences.flexibility ?? '---'} />
+                          <MiniIndicator label="AGENCY" value={preferences.agency ? `LVL ${preferences.agency}` : '---'} />
+                        </div>
+                      </div>
+                    </ConsoleSection>
+
+                    {/* Uplink Section */}
+                    <ConsoleSection title="UPLINK" hasData={hasUplinkData} index={3}>
+                      <div className="flex items-center gap-3">
+                        <SignalIndicator active={hasUplinkData} />
+                        <span className="text-zinc-400 text-xs" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+                          PHONE:
+                        </span>
                         <AnimatePresence mode="wait">
                           {preferences.phone ? (
                             <motion.span
                               key={preferences.phone}
                               initial={{ opacity: 0, y: -5 }}
                               animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: 5 }}
-                              transition={{ type: 'spring', stiffness: 300 }}
-                              className="text-rose-500 font-semibold text-base tracking-wider"
+                              className="text-rose-500 font-semibold text-xs"
                               style={{ fontFamily: "'Quicksand', sans-serif" }}
                             >
                               {preferences.phone}
                             </motion.span>
                           ) : (
-                            <motion.span
-                              key="empty"
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              exit={{ opacity: 0 }}
-                            >
-                              <TerminalTyping
-                                text="CONNECTING..."
-                                typingSpeed={70}
-                                deletingSpeed={35}
-                                pauseBeforeDelete={2000}
-                                pauseBeforeType={800}
-                              />
-                            </motion.span>
+                            <TerminalTyping text="CONNECTING..." typingSpeed={70} />
                           )}
                         </AnimatePresence>
                       </div>
+                    </ConsoleSection>
+                  </div>
+
+                  {/* RIGHT: MAMA Messages */}
+                  <div className="p-4 bg-zinc-50/50 flex flex-col">
+                    {/* Messages Header */}
+                    <div className="flex items-center gap-2 mb-3 pb-2 border-b border-zinc-100">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-rose-400 to-rose-500 flex items-center justify-center">
+                        <span className="text-white text-[10px] font-bold" style={{ fontFamily: "'Righteous', cursive" }}>
+                          M
+                        </span>
+                      </div>
+                      <span className="text-[10px] font-bold text-zinc-400 tracking-wider" style={{ fontFamily: "'Quicksand', sans-serif" }}>
+                        MAMA SAYS
+                      </span>
+                      <div className="flex-1" />
+                      <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     </div>
-                  </ConsoleSection>
+
+                    {/* Messages Area */}
+                    <div className="flex-1 overflow-y-auto space-y-2 min-h-[200px] max-h-[280px]">
+                      {messages.length === 0 ? (
+                        <div className="h-full flex items-center justify-center">
+                          <p
+                            className="text-xs text-zinc-300 text-center"
+                            style={{ fontFamily: "'Quicksand', sans-serif" }}
+                          >
+                            Fill out the form and<br />I&apos;ll have thoughts...
+                          </p>
+                        </div>
+                      ) : (
+                        <AnimatePresence mode="popLayout">
+                          {messages.map((message) => (
+                            <motion.div
+                              key={message.id}
+                              initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{
+                                type: 'spring',
+                                stiffness: 500,
+                                damping: 30,
+                              }}
+                              className="flex justify-start"
+                            >
+                              <div className="max-w-[90%] bg-white rounded-xl rounded-tl-sm px-3 py-2 shadow-sm border border-zinc-100">
+                                <p
+                                  className="text-xs text-zinc-700 leading-relaxed"
+                                  style={{ fontFamily: "'Quicksand', sans-serif" }}
+                                >
+                                  {message.text}
+                                </p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </AnimatePresence>
+                      )}
+                      <div ref={messagesEndRef} />
+                    </div>
+                  </div>
                 </div>
 
                 {/* Footer with animated wave */}
                 <div
                   className="px-6 py-3 relative z-30 bg-zinc-50"
-                  style={{
-                    borderTop: '1px solid rgba(0,0,0,0.05)'
-                  }}
+                  style={{ borderTop: '1px solid rgba(0,0,0,0.05)' }}
                 >
                   <WaveformDisplay active={hasUplinkData} />
                 </div>
@@ -316,8 +328,8 @@ export function JetsonsConsole() {
             </div>
           </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   )
 }
 
