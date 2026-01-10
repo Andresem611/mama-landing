@@ -2,20 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
-
-const buttonVariants = {
-  rest: { scale: 1, y: 0 },
-  hover: {
-    scale: 1.02,
-    y: -2,
-    transition: { type: 'spring' as const, stiffness: 400, damping: 17 }
-  },
-  tap: {
-    scale: 0.98,
-    y: 0,
-    transition: { type: 'spring' as const, stiffness: 400, damping: 17 }
-  }
-}
+import { cn } from '@/lib/utils'
 
 export function SocialButtons() {
   const supabase = createClient()
@@ -39,29 +26,69 @@ export function SocialButtons() {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-sm">
+    <div className="flex flex-col gap-4 w-full">
+      {/* Google Button */}
       <motion.button
-        variants={buttonVariants}
-        initial="rest"
-        whileHover="hover"
-        whileTap="tap"
         onClick={handleGoogleLogin}
-        className="flex items-center justify-center gap-3 w-full bg-white border-2 border-zinc-200 rounded-full px-6 py-4 font-quicksand font-semibold text-zinc-900 hover:border-zinc-300 transition-colors"
+        className={cn(
+          "relative flex items-center justify-center gap-3 w-full rounded-full px-6 py-4",
+          "bg-white border-[3px] border-zinc-200",
+          "shadow-[0_4px_0_0_#d4d4d8,0_6px_12px_rgba(0,0,0,0.1)]",
+          "transition-all duration-150 ease-out",
+          "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2"
+        )}
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
+        whileHover={{
+          scale: 1.02,
+          y: -2,
+          boxShadow: "0 6px 0 0 #d4d4d8, 0 8px 16px rgba(0,0,0,0.15)",
+        }}
+        whileTap={{
+          scale: 0.98,
+          y: 2,
+          boxShadow: "0 1px 0 0 #d4d4d8, 0 2px 4px rgba(0,0,0,0.1)",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 17,
+        }}
       >
         <GoogleIcon />
-        Continue with Google
+        <span className="font-semibold text-zinc-900">Continue with Google</span>
       </motion.button>
 
+      {/* Apple Button */}
       <motion.button
-        variants={buttonVariants}
-        initial="rest"
-        whileHover="hover"
-        whileTap="tap"
         onClick={handleAppleLogin}
-        className="flex items-center justify-center gap-3 w-full bg-zinc-900 rounded-full px-6 py-4 font-quicksand font-semibold text-white hover:bg-zinc-800 transition-colors"
+        className={cn(
+          "relative flex items-center justify-center gap-3 w-full rounded-full px-6 py-4",
+          "bg-gradient-to-b from-zinc-800 to-zinc-900 text-white",
+          "border-[3px] border-zinc-900",
+          "shadow-[0_4px_0_0_#18181b,0_6px_12px_rgba(24,24,27,0.4)]",
+          "transition-all duration-150 ease-out",
+          "outline-none focus-visible:ring-2 focus-visible:ring-rose-300 focus-visible:ring-offset-2"
+        )}
+        style={{ fontFamily: "'Quicksand', sans-serif" }}
+        whileHover={{
+          scale: 1.02,
+          y: -2,
+          boxShadow: "0 6px 0 0 #18181b, 0 8px 16px rgba(24,24,27,0.5)",
+        }}
+        whileTap={{
+          scale: 0.98,
+          y: 2,
+          boxShadow: "0 1px 0 0 #18181b, 0 2px 4px rgba(24,24,27,0.2)",
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 400,
+          damping: 17,
+        }}
       >
+        <span className="absolute inset-0 rounded-full bg-gradient-to-t from-transparent via-transparent to-white/10 pointer-events-none" />
         <AppleIcon />
-        Continue with Apple
+        <span className="relative font-semibold">Continue with Apple</span>
       </motion.button>
     </div>
   )
