@@ -245,7 +245,7 @@ export function JetsonsConsole() {
                               key={preferences.phone}
                               initial={{ opacity: 0, y: -5 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="text-rose-500 font-semibold text-xs"
+                              className="text-zinc-900 font-semibold text-xs"
                               style={{ fontFamily: "'Quicksand', sans-serif" }}
                             >
                               {preferences.phone}
@@ -489,7 +489,7 @@ function ConsoleField({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 5 }}
             transition={{ type: 'spring', stiffness: 300 }}
-            className={`text-rose-500 font-semibold truncate capitalize ${large ? 'tracking-wider' : ''}`}
+            className={`text-zinc-900 font-semibold truncate capitalize ${large ? 'tracking-wider' : ''}`}
           >
             {value}
           </motion.span>
@@ -697,7 +697,7 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="text-[10px] font-bold uppercase text-rose-500 truncate"
+            className="text-[10px] font-bold uppercase text-zinc-900 truncate"
             style={{ fontFamily: "'Quicksand', sans-serif" }}
             title={value}
           >

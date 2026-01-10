@@ -28,11 +28,11 @@ const primaryCtaClasses = `
   disabled:opacity-50 disabled:cursor-not-allowed
 `
 
-// Selection pill styles (matching DualCarousel)
+// Selection pill styles - clean modern look
 const selectionPillClasses = {
   base: `py-3 px-4 rounded-2xl font-medium transition-all duration-300`,
-  selected: `bg-rose-400 text-white shadow-lg shadow-rose-900/20`,
-  unselected: `bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl`,
+  selected: `bg-zinc-800 text-white shadow-lg shadow-zinc-900/20`,
+  unselected: `bg-white text-zinc-600 border border-zinc-200 shadow-sm hover:shadow-md hover:border-zinc-300`,
 }
 
 export default function AboutPage() {

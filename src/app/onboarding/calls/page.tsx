@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
@@ -39,23 +39,17 @@ const primaryCtaClasses = `
   disabled:opacity-50 disabled:cursor-not-allowed
 `
 
-// Selection pill styles (matching DualCarousel)
+// Selection pill styles - clean modern look
 const selectionPillClasses = {
   base: `py-3 px-4 rounded-2xl font-medium transition-all duration-300 flex items-center gap-3`,
-  selected: `bg-rose-400 text-white shadow-lg shadow-rose-900/20`,
-  unselected: `bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl`,
+  selected: `bg-zinc-800 text-white shadow-lg shadow-zinc-900/20`,
+  unselected: `bg-white text-zinc-600 border border-zinc-200 shadow-sm hover:shadow-md hover:border-zinc-300`,
 }
 
 export default function CallsPage() {
   const router = useRouter()
-  const { state, updatePreferences, addMessage, clearMessages } = useOnboarding()
+  const { state, updatePreferences, setMessage } = useOnboarding()
   const [loading, setLoading] = useState(false)
-  const lastCommentedCount = useRef(0)
-
-  // Clear messages when component mounts
-  useEffect(() => {
-    clearMessages()
-  }, [clearMessages])
 
   const toggleUseCase = (id: string) => {
     const current = state.preferences.use_cases ?? []
@@ -70,18 +64,14 @@ export default function CallsPage() {
       // First check for individual use case comment (50% chance)
       const useCaseComment = getUseCaseComment(id)
       if (useCaseComment && Math.random() > 0.5) {
-        setTimeout(() => addMessage(useCaseComment), 300)
+        setMessage(useCaseComment)
         return
       }
 
-      // Then check for count-based comment (only if count increased to a threshold)
-      const newCount = updated.length
-      if (newCount > lastCommentedCount.current) {
-        const countComment = getUseCaseCountComment(newCount)
-        if (countComment) {
-          setTimeout(() => addMessage(countComment), 300)
-          lastCommentedCount.current = newCount
-        }
+      // Then check for count-based comment
+      const countComment = getUseCaseCountComment(updated.length)
+      if (countComment) {
+        setMessage(countComment)
       }
     }
   }
@@ -193,8 +183,8 @@ export default function CallsPage() {
                   onClick={() => updatePreferences({ frequency: option.id })}
                   className={`py-3 px-4 rounded-2xl font-medium transition-all duration-300 ${
                     isSelected
-                      ? 'bg-rose-400 text-white shadow-lg shadow-rose-900/20'
-                      : 'bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl'
+                      ? 'bg-zinc-800 text-white shadow-lg shadow-zinc-900/20'
+                      : 'bg-white text-zinc-600 border border-zinc-200 shadow-sm hover:shadow-md hover:border-zinc-300'
                   }`}
                   style={{ fontFamily: "'Quicksand', sans-serif" }}
                 >

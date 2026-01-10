@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { useOnboarding } from '@/context/OnboardingContext'
@@ -29,21 +29,15 @@ const primaryCtaClasses = `
 // List-style selection buttons (for options with descriptions)
 const listButtonClasses = {
   base: `w-full py-3 px-4 rounded-2xl text-left transition-all duration-300`,
-  selected: `bg-rose-400 text-white shadow-lg shadow-rose-900/20`,
-  unselected: `bg-white/95 text-zinc-600 border-2 border-white/60 shadow-lg shadow-rose-900/10 hover:shadow-xl`,
+  selected: `bg-zinc-800 text-white shadow-lg shadow-zinc-900/20`,
+  unselected: `bg-white text-zinc-600 border border-zinc-200 shadow-sm hover:shadow-md hover:border-zinc-300`,
 }
 
 export default function StylePage() {
   const router = useRouter()
-  const { state, updatePreferences, addMessage, clearMessages } = useOnboarding()
+  const { state, updatePreferences, setMessage } = useOnboarding()
   const [loading, setLoading] = useState(false)
   const sliderTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const lastPersistence = useRef(state.preferences.persistence ?? 3)
-
-  // Clear messages when component mounts
-  useEffect(() => {
-    clearMessages()
-  }, [clearMessages])
 
   // Handle persistence slider changes with debounce
   const handlePersistenceChange = (value: number) => {
@@ -54,16 +48,12 @@ export default function StylePage() {
       clearTimeout(sliderTimeoutRef.current)
     }
 
-    // Only show comment if value changed significantly
-    if (value !== lastPersistence.current) {
-      sliderTimeoutRef.current = setTimeout(() => {
-        const persistenceComment = getPersistenceComment(value)
-        if (persistenceComment) {
-          addMessage(persistenceComment)
-        }
-        lastPersistence.current = value
-      }, 800)
-    }
+    sliderTimeoutRef.current = setTimeout(() => {
+      const persistenceComment = getPersistenceComment(value)
+      if (persistenceComment) {
+        setMessage(persistenceComment)
+      }
+    }, 500)
   }
 
   // Handle flexibility selection
@@ -71,7 +61,7 @@ export default function StylePage() {
     updatePreferences({ flexibility: flexibilityId })
     const flexComment = getFlexibilityComment(flexibilityId)
     if (flexComment) {
-      setTimeout(() => addMessage(flexComment), 300)
+      setMessage(flexComment)
     }
   }
 
@@ -80,7 +70,7 @@ export default function StylePage() {
     updatePreferences({ agency: agencyId })
     const agencyComment = getAgencyComment(agencyId)
     if (agencyComment) {
-      setTimeout(() => addMessage(agencyComment), 300)
+      setMessage(agencyComment)
     }
   }
 
@@ -128,6 +118,12 @@ export default function StylePage() {
           style={{ fontFamily: "'Quicksand', sans-serif" }}
         >
           Tune me up.
+        </p>
+        <p
+          className="text-zinc-400 text-sm italic"
+          style={{ fontFamily: "'Quicksand', sans-serif" }}
+        >
+          PS: I&apos;ll learn your preferences as we chat. This is just our starting point.
         </p>
       </div>
 
