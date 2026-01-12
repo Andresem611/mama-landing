@@ -333,32 +333,67 @@ export function JetsonsConsole() {
   )
 }
 
-// Status light that pulses when active
+// Status light with breathing ring animation
 function StatusLight({ active, index }: { active: boolean; index: number }) {
+  const baseDelay = index * 0.3
+
   return (
     <motion.div
-      className="relative"
+      className="relative w-3 h-3"
       initial={false}
-      animate={active ? 'active' : 'inactive'}
     >
-      {/* Glow effect */}
+      {/* Layer 1: Expanding Ring */}
       {active && (
         <motion.div
-          className="absolute inset-0 rounded-full bg-emerald-400 blur-sm"
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: index * 0.2 }}
+          className="absolute inset-0 rounded-full border border-emerald-400/40"
+          initial={{ scale: 1, opacity: 0.4 }}
+          animate={{
+            scale: [1, 2.5],
+            opacity: [0.4, 0]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeOut",
+            delay: baseDelay,
+          }}
         />
       )}
-      {/* Light bulb */}
-      <div
-        className="relative w-3 h-3 rounded-full"
+
+      {/* Layer 2: Soft Glow */}
+      {active && (
+        <motion.div
+          className="absolute inset-[-2px] rounded-full bg-emerald-400/30 blur-sm"
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: baseDelay,
+          }}
+        />
+      )}
+
+      {/* Layer 3: Core Dot */}
+      <motion.div
+        className="relative w-full h-full rounded-full"
+        animate={active ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+          delay: baseDelay,
+        }}
         style={{
           background: active
             ? 'radial-gradient(circle at 30% 30%, #86efac, #22c55e 50%, #15803d)'
             : 'radial-gradient(circle at 30% 30%, #d4d4d8, #a1a1aa 50%, #71717a)',
           boxShadow: active
             ? '0 0 8px rgba(34,197,94,0.8), inset 0 1px 2px rgba(255,255,255,0.3)'
-            : 'inset 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(255,255,255,0.3)'
+            : 'inset 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(255,255,255,0.3)',
         }}
       />
     </motion.div>
@@ -607,12 +642,12 @@ function NeedleGauge({ value, max, label }: { value: number; max: number; label:
 
           {/* Needle */}
           <motion.div
-            className="absolute left-1/2 top-1/2 origin-center"
+            className="absolute left-1/2 top-1/2 origin-bottom"
             style={{
               width: '2px',
               height: '28px',
               marginLeft: '-1px',
-              marginTop: '-24px'
+              marginTop: '-28px'
             }}
             animate={{ rotate: rotation }}
             transition={{ type: 'spring', stiffness: 100, damping: 15 }}
@@ -725,31 +760,63 @@ function MiniIndicator({ label, value }: { label: string; value: string }) {
   )
 }
 
-// Signal indicator for uplink
+// Signal indicator for uplink with wave sweep animation
+const BAR_HEIGHTS = [4, 8, 12, 16]
+
 function SignalIndicator({ active }: { active: boolean }) {
   return (
-    <div className="flex items-end gap-0.5">
-      {[1, 2, 3, 4].map((bar) => (
+    <div className="relative flex items-end gap-0.5">
+      {/* Signal bars */}
+      {BAR_HEIGHTS.map((height, index) => (
         <motion.div
-          key={bar}
-          className="w-1 rounded-sm"
+          key={index}
+          className="w-1 rounded-sm origin-bottom"
           style={{
-            height: `${bar * 4}px`,
-            background: active && bar <= 4
-              ? 'linear-gradient(180deg, #86efac, #22c55e)'
+            height: `${height}px`,
+            background: active
+              ? 'linear-gradient(180deg, #5EEAD4, #14B8A6)'
               : '#d4d4d8',
-            boxShadow: active && bar <= 4 ? '0 0 4px rgba(34,197,94,0.5)' : 'none'
+            boxShadow: active
+              ? '0 0 6px rgba(45, 212, 191, 0.6)'
+              : 'none',
           }}
+          initial={false}
           animate={active ? {
-            opacity: [0.7, 1, 0.7]
-          } : {}}
+            opacity: [0.85, 1, 0.85],
+            scaleY: [0.95, 1, 0.95],
+          } : {
+            opacity: 1,
+            scaleY: 1,
+          }}
           transition={{
-            duration: 1.5,
+            duration: 2,
             repeat: Infinity,
-            delay: bar * 0.1
+            ease: "easeInOut",
+            delay: index * 0.1,
           }}
         />
       ))}
+
+      {/* Wave sweep overlay (connected state only) */}
+      {active && (
+        <motion.div
+          className="absolute bottom-0 left-0 h-full pointer-events-none rounded-sm"
+          style={{
+            width: '6px',
+            background: 'linear-gradient(90deg, transparent, rgba(94, 234, 212, 0.7), transparent)',
+          }}
+          animate={{
+            x: [-6, 20],
+            opacity: [0, 0.9, 0],
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            repeatDelay: 2,
+            ease: [0.4, 0, 0.2, 1],
+          }}
+        />
+      )}
     </div>
   )
 }
